@@ -1,0 +1,35 @@
+{
+	"serveur": {
+		"port": 9029
+	},
+	"path": {
+		"bdd_infos": "BDD/BDD_infos.xml",
+		"logs": "LOG/",
+		"maps": "MAP/"
+	},
+	"connexion": {
+		"pseudo": {
+			"min": 3,
+			"max": 16
+		},
+		"mdp": {
+			"min": 6,
+			"max": 32
+		}
+	},
+	"managperso": {
+		"nbr_persos_max": 16,
+		"nom_perso": {
+			"min": 3,
+			"max": 16
+		}
+	},
+	"salon": {
+		"nbr_equipe_max": 8,
+		"nbr_persos_equipe": 16,
+		"chrono_lancement": 10000
+	},
+	"combat": {
+		"chrono_lancement": 5000
+	}
+}
