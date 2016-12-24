@@ -1,0 +1,143 @@
+{
+	"nom": "Map de test n°1",
+	"description": "Une map de test classique",
+	"versionMajeure": 1,
+	"versionMineure": 0,
+	"idcreateur": 1,
+	"typecombat": [
+		0,
+		1
+	],
+	"nbrequipemax": 3,
+	"nbrpersosequipemax": 4,
+	"difficulte": 3,
+	"tuiles": [
+		{
+			"type": 0,
+			"position": {
+				"x": 0,
+				"y": 0
+			},
+			"equipe": 0
+		},
+		{
+			"type": 1,
+			"position": {
+				"x": 1,
+				"y": 0
+			},
+			"equipe": 0
+		},
+		{
+			"type": 1,
+			"position": {
+				"x": 2,
+				"y": 0
+			},
+			"equipe": 0
+		},
+		{
+			"type": 1,
+			"position": {
+				"x": 3,
+				"y": 0
+			},
+			"equipe": 0
+		},
+		{
+			"type": 1,
+			"position": {
+				"x": 0,
+				"y": 1
+			},
+			"equipe": 0
+		},
+		{
+			"type": 1,
+			"position": {
+				"x": 1,
+				"y": 1
+			}
+		},
+		{
+			"type": 1,
+			"position": {
+				"x": 2,
+				"y": 1
+			},
+			"equipe": 1
+		},
+		{
+			"type": 1,
+			"position": {
+				"x": 3,
+				"y": 1
+			},
+			"equipe": 1
+		},
+		{
+			"type": 1,
+			"position": {
+				"x": 0,
+				"y": 2
+			},
+			"equipe": 1
+		},
+		{
+			"type": 1,
+			"position": {
+				"x": 1,
+				"y": 2
+			},
+			"equipe": 1
+		},
+		{
+			"type": 1,
+			"position": {
+				"x": 2,
+				"y": 2
+			},
+			"equipe": 1
+		},
+		{
+			"type": 1,
+			"position": {
+				"x": 3,
+				"y": 2
+			},
+			"equipe": 2
+		},
+		{
+			"type": 1,
+			"position": {
+				"x": 0,
+				"y": 3
+			},
+			"equipe": 2
+		},
+		{
+			"type": 1,
+			"position": {
+				"x": 1,
+				"y": 3
+			},
+			"equipe": 2
+		},
+		{
+			"type": 1,
+			"position": {
+				"x": 2,
+				"y": 3
+			},
+			"equipe": 2
+		},
+		{
+			"type": 1,
+			"position": {
+				"x": 3,
+				"y": 3
+			},
+			"equipe": 2
+		}
+	]
+}
