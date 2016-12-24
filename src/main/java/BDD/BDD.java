@@ -50,6 +50,10 @@ public class BDD {
 		}
 		return null;
 	}
+
+	public static void stop() {
+		SOURCE.close();
+	}
 	
 	private BDD() {
 	}

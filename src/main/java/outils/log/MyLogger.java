@@ -3,7 +3,7 @@
  * 
  * 
  */
-package log;
+package outils.log;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -59,6 +59,11 @@ public final class MyLogger {
 		fileXML.setFormatter(formatterXML);
 		logger.addHandler(fileXML);
 
+	}
+
+	public static void stop() {
+		fileTxt.close();
+		fileXML.close();
 	}
 
 	private MyLogger() {

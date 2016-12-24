@@ -1,6 +1,7 @@
 {
+	"nbr_thread_max": 100,
 	"serveur": {
-		"port": 9029
+		"port": 9092
 	},
 	"path": {
 		"bdd_infos": "BDD/BDD_infos.xml",

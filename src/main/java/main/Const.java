@@ -20,6 +20,9 @@ public final class Const {
 	//Chemin du fichier contenant les constantes
 	private static final String CONST_PATH = "constantes.json";
 
+	//Nombre de thread max pour EXEC
+	public static final int NBR_THREAD_MAX;
+
 	//Port serveur
 	public static final int SERVEUR_PORT;
 
@@ -42,6 +45,8 @@ public final class Const {
 
 	static {
 		JsonNode root = getJSON();
+		NBR_THREAD_MAX = root.at("/nbr_thread_max").intValue();
+		
 		SERVEUR_PORT = root.at("/serveur/port").intValue();
 
 		PATH_BDD_INFOS = root.at("/path/bdd_infos").textValue();
