@@ -6,12 +6,15 @@
 package client;
 
 import classe.ClasseXP;
+import client.XPContainer.XPCompressed;
+import netserv.Compressable;
+import netserv.Compressed;
 
 /**
  * XPContainer.java
  * 
  */
-public class XPContainer {
+public class XPContainer implements Compressable {
 	
 	private int xp;
 	private final ClasseXP classeXP;
@@ -24,6 +27,14 @@ public class XPContainer {
 	public int getNiveau() {
 		return this.classeXP.getFonctionXP().getNiveau(xp, classeXP.getInfluenceur());
 	}
+	
+	public int getXPActu() {
+		return this.xp - this.classeXP.getXP(getNiveau());
+	}
+	
+	public int getXPRestant() {
+		return this.classeXP.getXP(getNiveau() + 1) - this.xp;
+	}
 
 	public int getXp() {
 		return xp;
@@ -35,6 +46,48 @@ public class XPContainer {
 	
 	public void addXp(int add) {
 		this.xp += add;
+	}
+
+	@Override
+	public Compressed getCompressed() {
+		return new XPCompressed(this);
+	}
+	
+	public class XPCompressed implements Compressed {
+		
+		private int niveau;
+		private int xpActu;
+		private int xpRestantTotal;
+
+		private XPCompressed(XPContainer cont) {
+			this.niveau = cont.getNiveau();
+			this.xpActu = cont.getXPActu();
+			this.xpRestantTotal = this.xpActu + cont.getXPRestant();
+		}
+
+		public int getNiveau() {
+			return niveau;
+		}
+
+		public void setNiveau(int niveau) {
+			this.niveau = niveau;
+		}
+
+		public int getXpActu() {
+			return xpActu;
+		}
+
+		public void setXpActu(int xpActu) {
+			this.xpActu = xpActu;
+		}
+
+		public int getXpRestantTotal() {
+			return xpRestantTotal;
+		}
+
+		public void setXpRestantTotal(int xpRestantTotal) {
+			this.xpRestantTotal = xpRestantTotal;
+		}
 	}
 
 }

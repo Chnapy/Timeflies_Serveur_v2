@@ -6,6 +6,7 @@
 package main;
 
 import BDD.BDD;
+import classe.ClasseManager;
 import console.Console;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -43,6 +44,7 @@ public class ServeurManager implements StartNStop {
 		BDD.init();
 		
 		this.console.start();
+		ClasseManager.start();
 		this.netServ.start();
 		
 	}

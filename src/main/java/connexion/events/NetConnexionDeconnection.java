@@ -3,19 +3,19 @@
  * 
  * 
  */
-package netserv.connexion.events;
+package connexion.events;
 
 import com.corundumstudio.socketio.SocketIOClient;
+import connexion.NetConnexion;
 import netserv.DeconnexionListener;
-import netserv.connexion.NetworkConnexion;
 
 /**
- * NetConnexionDeconnexion.java
+ * NetConnexionDeconnection.java
  * 
  */
-public class NetConnexionDeconnexion extends DeconnexionListener<NetworkConnexion> {
+public class NetConnexionDeconnection extends DeconnexionListener<NetConnexion> {
 
-	public NetConnexionDeconnexion(NetworkConnexion nspCtn) {
+	public NetConnexionDeconnection(NetConnexion nspCtn) {
 		super(nspCtn);
 	}
 

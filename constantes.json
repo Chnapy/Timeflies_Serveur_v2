@@ -1,4 +1,5 @@
 {
+	"version_client": "bb1d22a79c61fd5399ff3a587fdd9045bb2c0ba4",
 	"nbr_thread_max": 100,
 	"serveur": {
 		"port": 9092

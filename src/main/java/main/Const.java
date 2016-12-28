@@ -19,6 +19,9 @@ public final class Const {
 
 	//Chemin du fichier contenant les constantes
 	private static final String CONST_PATH = "constantes.json";
+	
+	//Clef unique de la version actuelle du client
+	public static final String CLEF_CLIENT;
 
 	//Nombre de thread max pour EXEC
 	public static final int NBR_THREAD_MAX;
@@ -45,6 +48,8 @@ public final class Const {
 
 	static {
 		JsonNode root = getJSON();
+		CLEF_CLIENT = root.at("/version_client").textValue();
+		
 		NBR_THREAD_MAX = root.at("/nbr_thread_max").intValue();
 		
 		SERVEUR_PORT = root.at("/serveur/port").intValue();

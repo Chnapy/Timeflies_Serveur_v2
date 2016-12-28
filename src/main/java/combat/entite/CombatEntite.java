@@ -3,10 +3,15 @@
  * 
  * 
  */
-package combat;
+package combat.entite;
 
 import classe.ClasseEntite;
 import classe.TypeCPhysique;
+import client.Client;
+import combat.CombatClasse;
+import combat.CombatEnvoutement;
+import combat.CombatEquipe;
+import combat.Orientation;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,9 +24,11 @@ import map.Position;
  *
  */
 public class CombatEntite extends CombatClasse<ClasseEntite> {
+	
+	private final Client client;
 
 	private final int niveau;
-	private final Equipe equipe;
+	private final CombatEquipe equipe;
 
 	private final Map<TypeCPhysique, Integer> cPhysique;
 	private final Map<TypeCPhysique, Integer> cPhysiqueMax;
@@ -30,8 +37,9 @@ public class CombatEntite extends CombatClasse<ClasseEntite> {
 	private final Position position;
 	private Orientation orientation;
 
-	public CombatEntite(ClasseEntite classe, int niveau, Equipe equipe, List<Pair<TypeCPhysique, Integer>> cPhysique, List<Pair<TypeCPhysique, Integer>> cPhysiqueMax) {
+	public CombatEntite(Client client, ClasseEntite classe, int niveau, CombatEquipe equipe, List<Pair<TypeCPhysique, Integer>> cPhysique, List<Pair<TypeCPhysique, Integer>> cPhysiqueMax) {
 		super(classe);
+		this.client = client;
 		this.niveau = niveau;
 		this.equipe = equipe;
 		this.cPhysique = new HashMap();
@@ -43,6 +51,22 @@ public class CombatEntite extends CombatClasse<ClasseEntite> {
 		this.orientation = Orientation.NORD;
 	}
 
+	public Client getClient() {
+		return client;
+	}
+
+	public boolean isEnVie() {
+		return this.cPhysique.get(TypeCPhysique.VITALITE) > 0;
+	}
+	
+	public boolean isEntiteActive() {
+		return this instanceof CombatEntiteActive;
+	}
+	
+	public boolean isPersonnage() {
+		return this instanceof CombatPersonnage;
+	}
+
 	public void setOrientation(Orientation orientation) {
 		this.orientation = orientation;
 	}
@@ -51,7 +75,7 @@ public class CombatEntite extends CombatClasse<ClasseEntite> {
 		return niveau;
 	}
 
-	public Equipe getEquipe() {
+	public CombatEquipe getEquipe() {
 		return equipe;
 	}
 

@@ -5,9 +5,11 @@
  */
 package netserv;
 
-import netserv.connexion.NetworkConnexion;
 import com.corundumstudio.socketio.Configuration;
+import com.corundumstudio.socketio.SocketIONamespace;
 import com.corundumstudio.socketio.SocketIOServer;
+import connexion.NetConnexion;
+import general.NetGeneral;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import main.Const;
@@ -21,19 +23,23 @@ public class NetworkServeur implements StartNStop {
 	
 	private final SocketIOServer io;
 	
-	private final NetworkConnexion netCon;
+	private final NetConnexion connexion;
+	private final NetGeneral general;
+	private final SocketIONamespace nspMain;
 	
 	public NetworkServeur() {
 		this.io = new SocketIOServer(getIOConf());
+		this.nspMain = this.io.addNamespace("/main");
 		
-		this.netCon = new NetworkConnexion(this.io.addNamespace("/" + NetworkConnexion.NOM));
+		this.connexion = new NetConnexion(this.nspMain);
+		this.general = new NetGeneral(this.nspMain);
 	}
 	
 	@Override
 	public void onStart() {
-		this.io.start();
-		
 		Logger.getGlobal().log(Level.INFO, "D\u00e9marrage network - ''localhost:{0}''", io.getConfiguration().getPort());
+		
+		this.io.start();
 	}
 	
 	@Override

@@ -15,29 +15,35 @@ public enum TypeTuile {
 	 * Une entité peut accéder à cette case.
 	 * Ne bloque pas la ligne de vue.
 	 */
-	SIMPLE(true, true),
+	SIMPLE(1, true, true),
 	/**
 	 * Une entité ne peut pas accéder à cette case.
 	 * Ne bloque pas la ligne de vue.
 	 */
-	TROU(false, true),
+	TROU(2, false, true),
 	/**
 	 * Une entité peut accéder à cette case.
 	 * Bloque la ligne de vue.
 	 */
-	ECRAN(true, false),
+	ECRAN(3, true, false),
 	/**
 	 * Une entité ne peut pas accéder à cette case.
 	 * Bloque la ligne de vue.
 	 */
-	OBSTACLE(false, false);
+	OBSTACLE(4, false, false);
 
+	private final int id;
 	private final boolean acces;
 	private final boolean vue;
 
-	private TypeTuile(boolean acces, boolean vue) {
+	private TypeTuile(int id, boolean acces, boolean vue) {
+		this.id = id;
 		this.acces = acces;
 		this.vue = vue;
+	}
+
+	public int getId() {
+		return id;
 	}
 
 	public boolean canAcces() {
@@ -46,6 +52,15 @@ public enum TypeTuile {
 
 	public boolean canVue() {
 		return vue;
+	}
+	
+	public static TypeTuile getFromId(int id) {
+		for(TypeTuile t : TypeTuile.values()) {
+			if(t.getId() == id) {
+				return t;
+			}
+		}
+		return null;
 	}
 
 }
