@@ -41,7 +41,7 @@ public final class Const {
 	public static final int NBR_MANAG_PERSOS_MAX;
 
 	//Salon
-	public static final int NBR_SALON_EQUIPE_MAX, NBR_SALON_PERSOS_EQUIPE_MAX;
+	public static final int NBR_CLIENT_MAX, NBR_SALON_EQUIPE_MAX, NBR_SALON_PERSOS_EQUIPE_MAX;
 
 	//Chronos
 	public static final int CHRONO_SALON, CHRONO_COMBAT;
@@ -67,6 +67,7 @@ public final class Const {
 
 		NBR_MANAG_PERSOS_MAX = root.at("/managperso/nbr_persos_max").intValue();
 
+		NBR_CLIENT_MAX = root.at("/salon/nbr_client_max").intValue();
 		NBR_SALON_EQUIPE_MAX = root.at("/salon/nbr_equipe_max").intValue();
 		NBR_SALON_PERSOS_EQUIPE_MAX = root.at("/salon/nbr_persos_equipe").intValue();
 

@@ -48,7 +48,11 @@ public abstract class EventListener<N extends NamespaceContainer, M extends Mode
 	public void onData(SocketIOClient client, C data, AckRequest ackSender) throws Exception {
 		Logger.getGlobal().log(Level.INFO, "Message {0} : {1}", new Object[]{getEvent(), data});
 		if (this.isEventRecevable(client, data)) {
-			this.onEvent(client, data, ackSender);
+			try {
+				this.onEvent(client, data, ackSender);
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
 		} else {
 			Logger.getGlobal().log(Level.WARNING, "Message {0} refusé !", getEvent());
 		}

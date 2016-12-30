@@ -5,6 +5,7 @@
  */
 package connexion.events;
 
+import client.Client;
 import client.StatutClient;
 import com.corundumstudio.socketio.AckRequest;
 import com.corundumstudio.socketio.SocketIOClient;
@@ -30,7 +31,8 @@ public class NetConnexionEventDeconnexion extends EventListener<NetConnexion, Mo
 	public void onEvent(SocketIOClient client, RecDeconnexion data, AckRequest ackSender) {
 
 		try {
-			this.nspCtn.getClients().remove(client.getSessionId()).setStatut(StatutClient.DECONNECTE);
+			Client c = this.nspCtn.getClients().remove(client.getSessionId());
+			c.setStatut(StatutClient.DECONNECTE);
 		} catch (NullPointerException ex) {
 		}
 

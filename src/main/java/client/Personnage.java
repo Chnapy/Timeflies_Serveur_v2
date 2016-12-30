@@ -8,7 +8,6 @@ package client;
 import classe.ClasseEntite;
 import classe.ClasseManager;
 import classe.ClasseSort;
-import client.XPContainer.XPCompressed;
 import java.util.HashMap;
 import java.util.Map;
 import netserv.Compressable;
@@ -65,10 +64,10 @@ public class Personnage implements Compressable {
 
 	public class PersonnageCompressed implements Compressed {
 
-		private long idPersonnage;
-		private String nom;
-		private long classe;
-		private Compressed xpContainer;
+		private final long idPersonnage;
+		private final String nom;
+		private final long classe;
+		private final Compressed xpContainer;
 		private Map<Long, Compressed> sortXP;
 
 		private PersonnageCompressed(Personnage p) {
@@ -99,6 +98,31 @@ public class Personnage implements Compressable {
 
 		public Map<Long, Compressed> getSortXP() {
 			return sortXP;
+		}
+
+		@Override
+		public int hashCode() {
+			int hash = 7;
+			hash = 59 * hash + (int) (this.idPersonnage ^ (this.idPersonnage >>> 32));
+			return hash;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj) {
+				return true;
+			}
+			if (obj == null) {
+				return false;
+			}
+			if (getClass() != obj.getClass()) {
+				return false;
+			}
+			final PersonnageCompressed other = (PersonnageCompressed) obj;
+			if (this.idPersonnage != other.idPersonnage) {
+				return false;
+			}
+			return true;
 		}
 
 	}

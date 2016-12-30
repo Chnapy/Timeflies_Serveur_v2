@@ -27,6 +27,7 @@
 		}
 	},
 	"salon": {
+		"nbr_client_max": 64,
 		"nbr_equipe_max": 8,
 		"nbr_persos_equipe": 16,
 		"chrono_lancement": 10000

@@ -14,6 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import main.Const;
 import main.StartNStop;
+import matchmaking.salon.MatchmakingSalon;
 
 /**
  * NetworkServeur.java
@@ -22,10 +23,11 @@ import main.StartNStop;
 public class NetworkServeur implements StartNStop {
 	
 	private final SocketIOServer io;
+	private final SocketIONamespace nspMain;
 	
 	private final NetConnexion connexion;
 	private final NetGeneral general;
-	private final SocketIONamespace nspMain;
+	private final MatchmakingSalon mmsalon;
 	
 	public NetworkServeur() {
 		this.io = new SocketIOServer(getIOConf());
@@ -33,6 +35,7 @@ public class NetworkServeur implements StartNStop {
 		
 		this.connexion = new NetConnexion(this.nspMain);
 		this.general = new NetGeneral(this.nspMain);
+		this.mmsalon = new MatchmakingSalon(this.nspMain);
 	}
 	
 	@Override

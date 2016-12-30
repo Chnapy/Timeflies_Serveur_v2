@@ -27,7 +27,7 @@ public abstract class GeneralEventListener<R extends Receptable> extends EventLi
 	@Override
 	public boolean isEventRecevable(SocketIOClient client, R data) {
 		Client c = client.get("client");
-		return c != null && c.getStatut().equals(StatutClient.LOGGUE);
+		return c != null && c.hasStatut(StatutClient.LOGGUE);
 	}
 
 }

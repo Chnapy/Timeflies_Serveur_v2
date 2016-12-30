@@ -55,8 +55,9 @@ public class NetConnexionEventConnexion extends EventListener<NetConnexion, Mode
 		client.sendEvent(getEvent(), retour);
 
 		if (success && !this.nspCtn.getClients().containsKey(client.getSessionId())) {
-			Client c = new Client(retour.getIdJoueur(), client, StatutClient.LOGGUE, 
+			Client c = new Client(retour.getIdJoueur(), client, 
 					retour.getPseudo(), retour.getMail());
+			c.addStatut(StatutClient.LOGGUE);
 			this.nspCtn.getClients().put(client.getSessionId(), c);
 			
 			client.set("client", c);

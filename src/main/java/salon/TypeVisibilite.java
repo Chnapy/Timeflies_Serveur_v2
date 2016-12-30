@@ -12,8 +12,15 @@ package salon;
  */
 public enum TypeVisibilite {
 	
-	PRIVE, PUBLIQUE;
+	PRIVE(1), PUBLIQUE(2);
 	
+	private final int id;
 	
+	private TypeVisibilite(int id) {
+		this.id = id;
+	}
 
+	public int getId() {
+		return id;
+	}
 }

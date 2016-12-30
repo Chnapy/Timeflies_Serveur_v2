@@ -80,8 +80,12 @@ public class ClasseManager {
 				.findFirst().get();
 	}
 
-	public static <C extends ClasseEntite> C getEntiteFromId(long id) {
-		return (C) ENTITES.get(id);
+	public static <C extends ClasseEntite> C getEntiteFromId(long id) throws IllegalArgumentException {
+		ClasseEntite ce = ENTITES.get(id);
+		if (ce == null) {
+			throw new IllegalArgumentException("ID inexistant dans la map : " + id);
+		}
+		return (C) ce;
 	}
 
 	public static Map<Long, Compressed> getCompressedEnvoutements() {

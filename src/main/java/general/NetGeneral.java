@@ -7,6 +7,7 @@ package general;
 
 import com.corundumstudio.socketio.SocketIONamespace;
 import general.events.NetGeneralConnection;
+import general.events.NetGeneralEventCreerPerso;
 import general.events.NetGeneralEventGetAllClasseEntites;
 import general.events.NetGeneralEventGetAllPersos;
 import general.modele.ModeleGeneral;
@@ -24,6 +25,7 @@ public class NetGeneral extends NamespaceContainer<ModeleGeneral> {
 		super(nspMain, PREFIX, new ModeleGeneral());
 		this.addConnexionListener(new NetGeneralConnection(this));
 		this.addAllEvents(
+				new NetGeneralEventCreerPerso(this),
 				new NetGeneralEventGetAllPersos(this),
 				new NetGeneralEventGetAllClasseEntites(this)
 		);
