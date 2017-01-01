@@ -7,10 +7,12 @@ package general.events;
 
 import client.Client;
 import client.StatutClient;
+import com.corundumstudio.socketio.AckRequest;
 import com.corundumstudio.socketio.SocketIOClient;
 import general.NetGeneral;
 import general.modele.ModeleGeneral;
 import netserv.EventListener;
+import netserv.NetworkServeur;
 import netserv.Receptable;
 
 /**
@@ -26,8 +28,15 @@ public abstract class GeneralEventListener<R extends Receptable> extends EventLi
 
 	@Override
 	public boolean isEventRecevable(SocketIOClient client, R data) {
-		Client c = client.get("client");
+		Client c = client.get(NetworkServeur.CLIENT_CLIENT);
 		return c != null && c.hasStatut(StatutClient.LOGGUE);
 	}
+
+	@Override
+	public void onEvent(SocketIOClient client, R data, AckRequest ackSender) {
+		onEvent(client, data, ackSender, client.get(NetworkServeur.CLIENT_CLIENT));
+	}
+	
+	public abstract void onEvent(SocketIOClient client, R data, AckRequest ackSender, Client c);
 
 }

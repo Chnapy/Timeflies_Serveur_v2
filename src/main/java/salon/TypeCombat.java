@@ -47,13 +47,13 @@ public enum TypeCombat {
 
 	public abstract <S extends SalonProprietes> S getNewSalonProprietes();
 
-	public static TypeCombat getFromId(int id) {
+	public static TypeCombat getFromId(int id) throws IllegalArgumentException {
 		for (TypeCombat t : TypeCombat.values()) {
 			if (t.getId() == id) {
 				return t;
 			}
 		}
-		return null;
+		throw new IllegalArgumentException("id : " + id);
 	}
 
 }

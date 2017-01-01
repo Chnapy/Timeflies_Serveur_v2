@@ -6,6 +6,7 @@
 package general.modele;
 
 import BDD.BDD;
+import client.Client;
 import client.Personnage;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -37,12 +38,13 @@ public class ModeleGeneral extends Modele {
 	private static final String QUERY_INSERT_XPSORT = "INSERT INTO sortxp(id_personnage, id_classesort, xp) "
 			+ "VALUES(?, ?, 0)";
 
-	public Personnage creerPerso(long idJoueur, int idClasseEntite, String nom) {
+	public Personnage creerPerso(Client c, int idClasseEntite, String nom) {
+		long idJoueur = c.getId();
 		try {
 
 			Pair<Long, Set<Long>> infosPerso = this.creerPersoToBD(idJoueur, idClasseEntite, nom);
 
-			return getNewPerso(infosPerso.getKey(), idJoueur, idClasseEntite, nom, infosPerso.getValue());
+			return getNewPerso(infosPerso.getKey(), c, idClasseEntite, nom, infosPerso.getValue());
 
 		} catch (SQLException ex) {
 			Logger.getLogger(ModeleGeneral.class.getName()).log(Level.SEVERE, null, ex);
@@ -50,12 +52,12 @@ public class ModeleGeneral extends Modele {
 		}
 	}
 
-	private Personnage getNewPerso(long idPerso, long idJoueur, int idClasseEntite, String nom, Set<Long> listeSorts) {
+	private Personnage getNewPerso(long idPerso, Client c, int idClasseEntite, String nom, Set<Long> listeSorts) {
 		System.out.println(listeSorts);
 		Map<Long, Integer> sortXP = listeSorts.stream().collect(Collectors.toMap(
 				l -> l, l -> 0
 		));
-		return new Personnage(idPerso, nom, idClasseEntite, sortXP);
+		return new Personnage(c, idPerso, nom, idClasseEntite, sortXP);
 
 	}
 

@@ -16,7 +16,10 @@ import connexion.modele.ModeleConnexion;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import netserv.EventListener;
+import netserv.NetworkServeur;
 import netserv.Receptable;
 import netserv.Sendable;
 
@@ -34,6 +37,15 @@ public class NetConnexionEventConnexion extends EventListener<NetConnexion, Mode
 
 	@Override
 	public void onEvent(SocketIOClient client, RecConnexion data, AckRequest ackSender) {
+
+		if (client.get(NetworkServeur.CLIENT_VERSION) == null
+				|| !client.<Boolean>get(NetworkServeur.CLIENT_VERSION)) {
+			Logger.getGlobal().log(Level.WARNING, "Connexion : version client non conforme");
+			SendConnexion retour = new SendConnexion();
+			retour.setSuccess(false);
+			client.sendEvent(getEvent(), retour);
+			return;
+		}
 
 		String pseudo = data.getPseudo();
 		String mdp = data.getMdp();
@@ -55,14 +67,14 @@ public class NetConnexionEventConnexion extends EventListener<NetConnexion, Mode
 		client.sendEvent(getEvent(), retour);
 
 		if (success && !this.nspCtn.getClients().containsKey(client.getSessionId())) {
-			Client c = new Client(retour.getIdJoueur(), client, 
+			Client c = new Client(retour.getIdJoueur(), client,
 					retour.getPseudo(), retour.getMail());
-			c.addStatut(StatutClient.LOGGUE);
+			c.addStatut(StatutClient.LOGGUE, StatutClient.CONNECTE, StatutClient.CLIENT_OK);
 			this.nspCtn.getClients().put(client.getSessionId(), c);
-			
-			client.set("client", c);
-			
-			Set<Personnage> persos = this.modele.getAllPersonnagesClient(c.getId());
+
+			client.set(NetworkServeur.CLIENT_CLIENT, c);
+
+			Set<Personnage> persos = this.modele.getAllPersonnagesClient(c);
 			c.setPersonnages(persos);
 			Map<String, Integer> statsCombat = this.modele.getStatsCombat(c.getId());
 			c.getDonnees().setNbrCombatJoues(statsCombat.get("total"));

@@ -5,6 +5,8 @@
  */
 package connexion.events;
 
+import client.Client;
+import client.StatutClient;
 import com.corundumstudio.socketio.AckRequest;
 import com.corundumstudio.socketio.SocketIOClient;
 import connexion.NetConnexion;
@@ -12,6 +14,7 @@ import connexion.events.NetConnexionEventVersion.RecVersion;
 import connexion.modele.ModeleConnexion;
 import main.Const;
 import netserv.EventListener;
+import netserv.NetworkServeur;
 import netserv.Receptable;
 import netserv.Sendable;
 
@@ -21,10 +24,10 @@ import netserv.Sendable;
  */
 public class NetConnexionEventVersion extends EventListener<NetConnexion, ModeleConnexion, RecVersion> {
 
-	private static final String EVENT = "version";
+	private static final String SUFFIX = "version";
 
 	public NetConnexionEventVersion(NetConnexion nspCtn) {
-		super(EVENT, nspCtn, RecVersion.class);
+		super(SUFFIX, nspCtn, RecVersion.class);
 	}
 
 	@Override
@@ -32,9 +35,18 @@ public class NetConnexionEventVersion extends EventListener<NetConnexion, Modele
 
 		SendVersion paquet = new SendVersion(data.getVersion().equals(Const.CLEF_CLIENT));
 		
-		client.set("version", paquet.isSuccess());
+		client.set(NetworkServeur.CLIENT_VERSION, paquet.isSuccess());
 		
 		client.sendEvent(getEvent(), paquet);
+		
+		Client c = client.get(NetworkServeur.CLIENT_CLIENT);
+		if(c != null) {
+			if(paquet.isSuccess()) {
+				c.addStatut(StatutClient.CLIENT_OK);
+			} else {
+				c.removeStatut(StatutClient.CLIENT_OK);
+			}
+		}
 
 	}
 

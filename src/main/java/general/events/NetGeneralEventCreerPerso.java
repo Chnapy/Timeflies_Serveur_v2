@@ -33,7 +33,7 @@ public class NetGeneralEventCreerPerso extends GeneralEventListener<RecCreerPers
 	}
 
 	@Override
-	public void onEvent(SocketIOClient client, RecCreerPerso data, AckRequest ackSender) {
+	public void onEvent(SocketIOClient client, RecCreerPerso data, AckRequest ackSender, Client c) {
 
 		String nom = data.getNom();
 		int id = data.getIdclasseentite();
@@ -56,8 +56,6 @@ public class NetGeneralEventCreerPerso extends GeneralEventListener<RecCreerPers
 			return;
 		}
 
-		Client c = client.get("client");
-
 		if (c.getPersonnages().size() >= Const.NBR_MANAG_PERSOS_MAX) {
 			Logger.getGlobal().log(Level.WARNING, "Cr\u00e9ation perso : nbr persos max d\u00e9j\u00e0 atteint : {0}/{1}", new Object[]{c.getPersonnages().size(), Const.NBR_MANAG_PERSOS_MAX});
 			setSendFailed(client, send);
@@ -66,7 +64,7 @@ public class NetGeneralEventCreerPerso extends GeneralEventListener<RecCreerPers
 
 		long idJoueur = c.getId();
 
-		Personnage perso = this.modele.creerPerso(idJoueur, id, nom);
+		Personnage perso = this.modele.creerPerso(c, id, nom);
 		send.setNewperso(perso.getCompressed());
 
 		client.sendEvent(getEvent(), send);

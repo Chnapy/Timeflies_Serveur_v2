@@ -5,14 +5,20 @@
  */
 package salon;
 
+import classe.ClasseEntite;
 import client.Client;
+import client.Personnage;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import main.Const;
 import netserv.Compressable;
 import netserv.Compressed;
+import salon.net.NetSalon;
+import salon.net.events.NetSalonEventSetProprietes;
 import salon.typecombatproprietes.SalonProprietes;
 
 /**
@@ -20,7 +26,7 @@ import salon.typecombatproprietes.SalonProprietes;
  *
  */
 public class Salon implements Compressable {
-	
+
 	private static int newID = 0;
 
 	private final int id;
@@ -31,7 +37,7 @@ public class Salon implements Compressable {
 	private int nbrPersoClasse;
 	private final Map<Client, Boolean> clients;
 	private Client dirigeant;
-	private final Set<SalonEquipe> equipes;
+	private final Map<Integer, SalonEquipe> equipes;
 
 	public Salon(Client client) {
 		this.id = getNewId();
@@ -39,11 +45,11 @@ public class Salon implements Compressable {
 		this.visibilite = TypeVisibilite.PUBLIQUE;
 		this.typeCombat = TypeCombat.EQUIPE;
 		this.typeCombatProprietes = this.typeCombat.getNewSalonProprietes();
-		this.nbrPersoClasse = 0;
+		this.nbrPersoClasse = -1;
 		this.clients = new HashMap();
 		this.clients.put(client, false);
 		this.dirigeant = client;
-		this.equipes = new HashSet();
+		this.equipes = new HashMap();
 	}
 
 	public int getId() {
@@ -78,8 +84,19 @@ public class Salon implements Compressable {
 		return clients;
 	}
 
-	public Set<SalonEquipe> getEquipes() {
+	public Map<Integer, SalonEquipe> getEquipes() {
 		return equipes;
+	}
+
+	public void removeClient(Client c) {
+		this.equipes.values().forEach(e -> e.removeClient(c));
+		this.clients.remove(c);
+	}
+
+	public void addClient(Client c) {
+		if (this.clients.size() < Const.NBR_CLIENT_MAX) {
+			this.clients.put(c, false);
+		}
 	}
 
 	public void setMap(ClasseMap map) {
@@ -92,14 +109,17 @@ public class Salon implements Compressable {
 
 	public void setTypeCombat(TypeCombat typeCombat) {
 		this.typeCombat = typeCombat;
+		this.setTypeCombatProprietes(typeCombat.getNewSalonProprietes());
 	}
 
-	public void setTypeCombatProprietes(SalonProprietes typeCombatProprietes) {
+	private void setTypeCombatProprietes(SalonProprietes typeCombatProprietes) {
 		this.typeCombatProprietes = typeCombatProprietes;
 	}
 
 	public void setNbrPersoClasse(int nbrPersoClasse) {
-		this.nbrPersoClasse = nbrPersoClasse;
+		if (nbrPersoClasse > 0) {
+			this.nbrPersoClasse = nbrPersoClasse;
+		}
 	}
 
 	public Client getDirigeant() {
@@ -145,6 +165,100 @@ public class Salon implements Compressable {
 		return newID;
 	}
 
+	public boolean ajouterPerso(Client c, long idperso, int idequipe) {
+		if (this.clients.get(c) != false) {
+			return false;
+		}
+
+		Personnage p = c.getPersonnages().get(idperso);
+		if (p == null) {
+			return false;
+		}
+
+		SalonEquipe se = this.equipes.get(idequipe);
+		if (se == null || containsPerso(p)) {
+			return false;
+		}
+
+		se.add(p);
+
+		if (!checkProprietes()) {
+			se.remove(p);
+			return false;
+		}
+		return true;
+	}
+
+	public boolean retraitPerso(Client c, long idperso) {
+		if (this.clients.get(c) != false) {
+			return false;
+		}
+
+		Personnage p = c.getPersonnages().get(idperso);
+		if (p == null) {
+			return false;
+		}
+
+		this.equipes.values().forEach((se) -> se.remove(p));
+		return true;
+	}
+
+	public boolean containsPerso(Personnage p) {
+		return this.equipes.values().stream().anyMatch((se) -> (se.contains(p)));
+	}
+
+	public boolean checkProprietes() {
+		HashMap<ClasseEntite, Integer> nbrClasses = new HashMap();
+		this.equipes.values().forEach((se)
+				-> se.forEach(p -> nbrClasses.merge(p.getClasse(), 1, (t, u) -> t + 1)));
+		return nbrClasses.keySet().stream().noneMatch((ce)
+				-> (nbrClasses.get(ce) > this.nbrPersoClasse))
+				&& this.typeCombatProprietes.checkProprietes(this);
+	}
+
+	public void setProprietes(NetSalonEventSetProprietes.RecSetProprietes data, NetSalon ns) {
+
+		if (data.getIdmap() != null) {
+			//TODO
+		}
+
+		if (data.getVisibilite() != null) {
+			try {
+				setVisibilite(TypeVisibilite.getFromId(data.getVisibilite()));
+			} catch (IllegalArgumentException ex) {
+				Logger.getGlobal().warning(ex.toString());
+				data.setVisibilite(null);
+			}
+		}
+
+		if (data.getTypecombat() != null) {
+			try {
+				setTypeCombat(TypeCombat.getFromId(data.getTypecombat()));
+			} catch (IllegalArgumentException ex) {
+				Logger.getGlobal().warning(ex.toString());
+				data.setTypecombat(null);
+			}
+		}
+
+		if (data.getNbr_perso_classe() != null) {
+			setNbrPersoClasse(data.getNbr_perso_classe());
+			data.setNbr_perso_classe(getNbrPersoClasse());
+		}
+
+		if (data.getIddirigeant() != null) {
+			try {
+				setDirigeant(
+						ns.getClientFromId(data.getIddirigeant())
+				);
+			} catch (IllegalArgumentException ex) {
+				Logger.getGlobal().warning(ex.toString());
+				data.setIddirigeant(null);
+			}
+		}
+
+		this.typeCombatProprietes.setProprietes(data);
+	}
+
 	public static class SalonCompressed implements Compressed {
 
 		private final int id;
@@ -167,7 +281,7 @@ public class Salon implements Compressable {
 			clients = new HashSet();
 			s.getClients().forEach((c, b) -> clients.add(c.getCompressed()));
 			dirigeant = s.getDirigeant().getId();
-			equipes = s.getEquipes().stream().map(e -> e.getCompressed()).collect(Collectors.toSet());
+			equipes = s.getEquipes().values().stream().map(e -> e.getCompressed()).collect(Collectors.toSet());
 		}
 
 		public int getId() {

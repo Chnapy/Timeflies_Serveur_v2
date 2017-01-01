@@ -13,6 +13,7 @@ import connexion.NetConnexion;
 import connexion.events.NetConnexionEventDeconnexion.RecDeconnexion;
 import connexion.modele.ModeleConnexion;
 import netserv.EventListener;
+import netserv.NetworkServeur;
 import netserv.Receptable;
 
 /**
@@ -21,10 +22,10 @@ import netserv.Receptable;
  */
 public class NetConnexionEventDeconnexion extends EventListener<NetConnexion, ModeleConnexion, RecDeconnexion> {
 
-	private static final String EVENT = "deconnexion";
+	private static final String SUFFIX = "deconnexion";
 
 	public NetConnexionEventDeconnexion(NetConnexion nspCtn) {
-		super(EVENT, nspCtn, RecDeconnexion.class);
+		super(SUFFIX, nspCtn, RecDeconnexion.class);
 	}
 
 	@Override
@@ -33,10 +34,13 @@ public class NetConnexionEventDeconnexion extends EventListener<NetConnexion, Mo
 		try {
 			Client c = this.nspCtn.getClients().remove(client.getSessionId());
 			c.setStatut(StatutClient.DECONNECTE);
+			client.del(NetworkServeur.CLIENT_VERSION);
+			client.del(NetworkServeur.CLIENT_CLIENT);
+			client.del(NetworkServeur.CLIENT_SALON);
 		} catch (NullPointerException ex) {
 		}
 
-//		client.disconnect();
+		client.disconnect();
 	}
 
 	public static class RecDeconnexion extends Receptable {

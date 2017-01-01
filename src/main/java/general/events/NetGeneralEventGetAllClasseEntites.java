@@ -5,10 +5,8 @@
  */
 package general.events;
 
-import classe.ClasseEntite;
-import classe.ClasseEnvoutement;
 import classe.ClasseManager;
-import classe.ClasseSort;
+import client.Client;
 import com.corundumstudio.socketio.AckRequest;
 import com.corundumstudio.socketio.SocketIOClient;
 import general.NetGeneral;
@@ -31,7 +29,7 @@ public class NetGeneralEventGetAllClasseEntites extends GeneralEventListener<Rec
 	}
 
 	@Override
-	public void onEvent(SocketIOClient client, RecGetAllClasseEntites data, AckRequest ackSender) {
+	public void onEvent(SocketIOClient client, RecGetAllClasseEntites data, AckRequest ackSender, Client c) {
 		SendGetAllClasseEntites sgace = new SendGetAllClasseEntites();
 		sgace.setClasseEntites(
 				ClasseManager.getCompressedEnvoutements(),

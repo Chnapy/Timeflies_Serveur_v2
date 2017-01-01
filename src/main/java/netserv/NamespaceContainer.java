@@ -62,5 +62,14 @@ public abstract class NamespaceContainer<M extends Modele> {
 	public HashMap<UUID, Client> getClients() {
 		return clients;
 	}
+	
+	public Client getClientFromId(long id) throws IllegalArgumentException {
+		for(Client c : this.clients.values()) {
+			if(c.getId() == id) {
+				return c;
+			}
+		}
+		throw new IllegalArgumentException("id : " + id);
+	}
 
 }

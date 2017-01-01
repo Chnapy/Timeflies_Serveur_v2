@@ -6,6 +6,7 @@
 package connexion.modele;
 
 import BDD.BDD;
+import client.Client;
 import client.Personnage;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -98,7 +99,8 @@ public class ModeleConnexion extends Modele {
 		return ret;
 	}
 
-	public Set<Personnage> getAllPersonnagesClient(long idJoueur) {
+	public Set<Personnage> getAllPersonnagesClient(Client c) {
+		long idJoueur = c.getId();
 		Set<Personnage> liste = new HashSet();
 		try (Connection connection = BDD.getConnection();
 				PreparedStatement st_perso = connection.prepareStatement(QUERY_GET_PERSOS);
@@ -125,7 +127,7 @@ public class ModeleConnexion extends Modele {
 						}
 					}
 
-					Personnage p = new Personnage(idPerso, nom, idClasseEntite, mapSXP);
+					Personnage p = new Personnage(c, idPerso, nom, idClasseEntite, mapSXP);
 
 					liste.add(p);
 				}

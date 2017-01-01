@@ -30,7 +30,7 @@ public class MMSalonEventEntreListeSalons extends MMSalonEventListener<RecEntreL
 	}
 
 	@Override
-	public void onEvent(SocketIOClient client, RecEntreListeSalons data, AckRequest ackSender) {
+	public void onEvent(SocketIOClient client, RecEntreListeSalons data, AckRequest ackSender, Client c) {
 
 		SendEntreListeSalons liste = new SendEntreListeSalons();
 		liste.setSuccess(true);
@@ -39,7 +39,6 @@ public class MMSalonEventEntreListeSalons extends MMSalonEventListener<RecEntreL
 				.collect(Collectors.toList())
 		);
 		
-		Client c = client.get("client");
 		c.addStatut(StatutClient.LISTE_SALONS);
 		client.sendEvent(getEvent(), liste);
 

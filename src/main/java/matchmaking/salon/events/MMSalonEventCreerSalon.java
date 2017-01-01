@@ -12,6 +12,7 @@ import com.corundumstudio.socketio.SocketIOClient;
 import matchmaking.salon.MatchmakingSalon;
 import matchmaking.salon.events.MMSalonEventCreerSalon.RecCreerSalon;
 import netserv.Compressed;
+import netserv.NetworkServeur;
 import netserv.Receptable;
 import netserv.Sendable;
 import salon.Salon;
@@ -31,19 +32,18 @@ public class MMSalonEventCreerSalon extends MMSalonEventListener<RecCreerSalon> 
 	@Override
 	public boolean isEventRecevable(SocketIOClient client, RecCreerSalon data) {
 		return super.isEventRecevable(client, data) 
-				&& ((Client) client.get("client")).hasStatut(StatutClient.LISTE_SALONS);
+				&& ((Client) client.get(NetworkServeur.CLIENT_CLIENT)).hasStatut(StatutClient.LISTE_SALONS);
 	}
 
 	@Override
-	public void onEvent(SocketIOClient client, RecCreerSalon data, AckRequest ackSender) {
-		Client c = client.get("client");
+	public void onEvent(SocketIOClient client, RecCreerSalon data, AckRequest ackSender, Client c) {
 
 		Salon salon = new Salon(c);
 		SendCreerSalon scs = new SendCreerSalon();
 		scs.setSuccess(true);
 		scs.setSalon(salon.getCompressed());
 
-		client.set("salon", salon);
+		client.set(NetworkServeur.CLIENT_SALON, salon);
 		c.addStatut(StatutClient.EN_SALON);
 		client.sendEvent(getEvent(), scs);
 

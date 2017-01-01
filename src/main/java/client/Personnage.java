@@ -19,13 +19,15 @@ import netserv.Compressed;
  */
 public class Personnage implements Compressable {
 
+	private final Client client;
 	private final long idPersonnage;
 	private final String nom;
 	private final ClasseEntite classe;
 	private final XPContainer persoXP;
 	private final Map<ClasseSort, XPContainer> sortXP;
 
-	public Personnage(long idPersonnage, String nom, long idClasse, Map<Long, Integer> sortXP) {
+	public Personnage(Client client, long idPersonnage, String nom, long idClasse, Map<Long, Integer> sortXP) {
+		this.client = client;
 		this.idPersonnage = idPersonnage;
 		this.nom = nom;
 		this.classe = ClasseManager.getEntiteFromId(idClasse);
@@ -35,6 +37,10 @@ public class Personnage implements Compressable {
 			ClasseSort c = ClasseManager.getSortFromId(idClasseSort);
 			this.sortXP.put(c, new XPContainer(xp, c.getClasseXP()));
 		});
+	}
+
+	public Client getClient() {
+		return client;
 	}
 
 	public long getIdPersonnage() {

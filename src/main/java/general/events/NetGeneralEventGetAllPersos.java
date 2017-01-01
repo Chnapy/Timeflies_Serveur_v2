@@ -29,9 +29,8 @@ public class NetGeneralEventGetAllPersos extends GeneralEventListener<RecGetAllP
 	}
 
 	@Override
-	public void onEvent(SocketIOClient client, RecGetAllPersos data, AckRequest ackSender) {
+	public void onEvent(SocketIOClient client, RecGetAllPersos data, AckRequest ackSender, Client c) {
 		
-		Client c = client.get("client");
 		SendGetAllPersos sgap = new SendGetAllPersos();
 		sgap.setPersos(c.getPersonnages().values().stream()
 				.map((p) -> p.getCompressed())
