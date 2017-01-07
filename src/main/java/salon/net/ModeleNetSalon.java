@@ -8,9 +8,9 @@ package salon.net;
 import netserv.Modele;
 
 /**
- * ModeleSalon.java
+ * ModeleNetSalon.java
  * 
  */
-public class ModeleSalon extends Modele {
-
+public class ModeleNetSalon extends Modele {
+	
 }

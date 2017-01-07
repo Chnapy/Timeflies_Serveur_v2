@@ -62,6 +62,7 @@ public class ModeleConnexion extends Modele {
 				String BDmdp = rs.getString("mdp");
 				String BDsalt = rs.getString("salt_mdp");
 				String mdpCrypt = this.mdpCrypt(mdp, BDsalt);
+				System.out.println(mdpCrypt);
 
 				if (!BDmdp.equals(mdpCrypt)) {
 					connection.rollback();

@@ -16,8 +16,6 @@ import java.sql.Statement;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import javafx.util.Pair;
 import netserv.Modele;
@@ -38,18 +36,12 @@ public class ModeleGeneral extends Modele {
 	private static final String QUERY_INSERT_XPSORT = "INSERT INTO sortxp(id_personnage, id_classesort, xp) "
 			+ "VALUES(?, ?, 0)";
 
-	public Personnage creerPerso(Client c, int idClasseEntite, String nom) {
+	public Personnage creerPerso(Client c, int idClasseEntite, String nom) throws SQLException {
 		long idJoueur = c.getId();
-		try {
 
-			Pair<Long, Set<Long>> infosPerso = this.creerPersoToBD(idJoueur, idClasseEntite, nom);
+		Pair<Long, Set<Long>> infosPerso = this.creerPersoToBD(idJoueur, idClasseEntite, nom);
 
-			return getNewPerso(infosPerso.getKey(), c, idClasseEntite, nom, infosPerso.getValue());
-
-		} catch (SQLException ex) {
-			Logger.getLogger(ModeleGeneral.class.getName()).log(Level.SEVERE, null, ex);
-			throw new Error();
-		}
+		return getNewPerso(infosPerso.getKey(), c, idClasseEntite, nom, infosPerso.getValue());
 	}
 
 	private Personnage getNewPerso(long idPerso, Client c, int idClasseEntite, String nom, Set<Long> listeSorts) {
@@ -96,8 +88,8 @@ public class ModeleGeneral extends Modele {
 				while (rs.next()) {
 
 					long idClasseSort = rs.getLong("id_classesort");
-					
-					System.out.println("ID:"+idClasseSort);
+
+					System.out.println("ID:" + idClasseSort);
 					idSorts.add(idClasseSort);
 
 					st_insert_xpsort.setLong(1, idPerso);

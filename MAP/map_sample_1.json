@@ -5,8 +5,8 @@
 	"versionMineure": 0,
 	"idcreateur": 1,
 	"typecombat": [
-		0,
-		1
+		1,
+		2
 	],
 	"nbrequipemax": 3,
 	"nbrpersosequipemax": 4,

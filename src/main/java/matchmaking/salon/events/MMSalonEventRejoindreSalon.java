@@ -11,7 +11,6 @@ import com.corundumstudio.socketio.AckRequest;
 import com.corundumstudio.socketio.SocketIOClient;
 import matchmaking.salon.MatchmakingSalon;
 import matchmaking.salon.events.MMSalonEventRejoindreSalon.RecRejoindreSalon;
-import netserv.Compressed;
 import netserv.NetworkServeur;
 import netserv.Receptable;
 import netserv.Sendable;
@@ -47,7 +46,7 @@ public class MMSalonEventRejoindreSalon extends MMSalonEventListener<RecRejoindr
 			salon.getClients().put(c, false);
 			client.set(NetworkServeur.CLIENT_SALON, salon);
 			c.addStatut(StatutClient.EN_SALON);
-			srs.setSalon(salon.getCompressed());
+			srs.setSalon(salon);
 		}
 		
 		client.sendEvent(getEvent(), srs);
@@ -68,13 +67,13 @@ public class MMSalonEventRejoindreSalon extends MMSalonEventListener<RecRejoindr
 
 	public static class SendRejoindreSalon extends Sendable {
 
-		private Compressed salon;
+		private Salon salon;
 
-		public Compressed getSalon() {
+		public Salon getSalon() {
 			return salon;
 		}
 
-		public void setSalon(Compressed salon) {
+		public void setSalon(Salon salon) {
 			this.salon = salon;
 		}
 	}

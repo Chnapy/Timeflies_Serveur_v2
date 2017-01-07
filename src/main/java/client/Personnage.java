@@ -8,6 +8,7 @@ package client;
 import classe.ClasseEntite;
 import classe.ClasseManager;
 import classe.ClasseSort;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.HashMap;
 import java.util.Map;
 import netserv.Compressable;
@@ -19,7 +20,9 @@ import netserv.Compressed;
  */
 public class Personnage implements Compressable {
 
+	@JsonIgnore
 	private final Client client;
+	
 	private final long idPersonnage;
 	private final String nom;
 	private final ClasseEntite classe;

@@ -14,6 +14,10 @@ public class Position {
 	private int x;
 	private int y;
 	
+	public Position() {
+		x = y = -1;
+	}
+	
 	public Position(int x, int y) {
 		this.x = x;
 		this.y = y;
@@ -67,6 +71,11 @@ public class Position {
 		hash = 19 * hash + this.x;
 		hash = 19 * hash + this.y;
 		return hash;
+	}
+
+	@Override
+	public String toString() {
+		return "Position{" + "x=" + x + ", y=" + y + '}';
 	}
 
 }

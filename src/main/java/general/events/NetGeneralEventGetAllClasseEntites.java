@@ -36,6 +36,7 @@ public class NetGeneralEventGetAllClasseEntites extends GeneralEventListener<Rec
 				ClasseManager.getCompressedSorts(),
 				ClasseManager.getCompressedEntites()
 		);
+		sgace.setSuccess(true);
 		
 		client.sendEvent(getEvent(), sgace);
 	}

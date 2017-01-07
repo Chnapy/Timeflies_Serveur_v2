@@ -35,6 +35,7 @@ public class NetGeneralEventGetAllPersos extends GeneralEventListener<RecGetAllP
 		sgap.setPersos(c.getPersonnages().values().stream()
 				.map((p) -> p.getCompressed())
 				.collect(Collectors.toList()));
+		sgap.setSuccess(true);
 		
 		client.sendEvent(getEvent(), sgap);
 	}

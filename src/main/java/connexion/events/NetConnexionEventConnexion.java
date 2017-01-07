@@ -112,15 +112,15 @@ public class NetConnexionEventConnexion extends EventListener<NetConnexion, Mode
 
 	public static class SendConnexion extends Sendable {
 
-		private long idJoueur;
+		private Long idJoueur;
 		private String pseudo;
 		private String mail;
 
-		public long getIdJoueur() {
+		public Long getIdJoueur() {
 			return idJoueur;
 		}
 
-		public void setIdJoueur(long idJoueur) {
+		public void setIdJoueur(Long idJoueur) {
 			this.idJoueur = idJoueur;
 		}
 

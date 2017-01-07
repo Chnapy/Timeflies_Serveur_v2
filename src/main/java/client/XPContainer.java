@@ -7,6 +7,8 @@ package client;
 
 import classe.ClasseXP;
 import client.XPContainer.XPCompressed;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import netserv.Compressable;
 import netserv.Compressed;
 
@@ -17,6 +19,8 @@ import netserv.Compressed;
 public class XPContainer implements Compressable {
 	
 	private int xp;
+	
+	@JsonIgnore
 	private final ClasseXP classeXP;
 	
 	public XPContainer(int xp, ClasseXP classeXP) {
@@ -48,6 +52,7 @@ public class XPContainer implements Compressable {
 		this.xp += add;
 	}
 
+	@JsonAnyGetter
 	@Override
 	public Compressed getCompressed() {
 		return new XPCompressed(this);

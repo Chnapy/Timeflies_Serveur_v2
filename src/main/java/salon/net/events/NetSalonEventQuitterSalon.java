@@ -11,6 +11,7 @@ import com.corundumstudio.socketio.AckRequest;
 import com.corundumstudio.socketio.SocketIOClient;
 import netserv.NetworkServeur;
 import netserv.Receptable;
+import netserv.Sendable;
 import salon.Salon;
 import salon.net.NetSalon;
 import salon.net.events.NetSalonEventQuitterSalon.RecQuitterSalon;
@@ -34,9 +35,19 @@ public class NetSalonEventQuitterSalon extends NetSalonEventListener<RecQuitterS
 		s.removeClient(c);
 		c.removeStatut(StatutClient.EN_SALON);
 		client.del(NetworkServeur.CLIENT_SALON);
+		
+		SendQuitterSalon sqs = new SendQuitterSalon();
+		sqs.setSuccess(true);
+		
+		client.sendEvent(getEvent(), sqs);
+		
 	}
 	
 	public static class RecQuitterSalon extends Receptable {
+		
+	}
+	
+	public static class SendQuitterSalon extends Sendable {
 		
 	}
 

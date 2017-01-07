@@ -13,7 +13,7 @@ import netserv.EventListener;
 import netserv.NetworkServeur;
 import netserv.Receptable;
 import salon.Salon;
-import salon.net.ModeleSalon;
+import salon.net.ModeleNetSalon;
 import salon.net.NetSalon;
 
 /**
@@ -21,7 +21,7 @@ import salon.net.NetSalon;
  *
  * @param <R>
  */
-public abstract class NetSalonEventListener<R extends Receptable> extends EventListener<NetSalon, ModeleSalon, R> {
+public abstract class NetSalonEventListener<R extends Receptable> extends EventListener<NetSalon, ModeleNetSalon, R> {
 
 	public NetSalonEventListener(String suffixe, NetSalon nspCtn, Class<R> classe) {
 		super(suffixe, nspCtn, classe);

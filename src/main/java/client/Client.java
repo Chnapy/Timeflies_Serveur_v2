@@ -6,25 +6,33 @@
 package client;
 
 import com.corundumstudio.socketio.SocketIOClient;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import netserv.Compressable;
-import netserv.Compressed;
 
 /**
  * Client.java
  *
  */
-public class Client implements Compressable {
+public class Client {
 
 	private final long id;
+	
+	@JsonIgnore
 	private final SocketIOClient socketClient;
+	
+	@JsonIgnore
 	private Set<StatutClient> statut;
+	
+	@JsonIgnore
 	private final DonneesClient donnees;
+	
+	@JsonIgnore
 	private final Map<Long, Personnage> personnages;
 
 	public Client(long id, SocketIOClient socketClient, String pseudo, String mail) {
@@ -81,29 +89,10 @@ public class Client implements Compressable {
 		clearStatut();
 		addStatut(statuts);
 	}
-
-	@Override
-	public Compressed getCompressed() {
-		return new ClientCompressed(this);
-	}
-
-	public class ClientCompressed implements Compressed {
-
-		private final long id;
-		private final String pseudo;
-
-		public ClientCompressed(Client c) {
-			id = c.getId();
-			pseudo = c.getDonnees().getInfosCompte().getPseudo();
-		}
-
-		public long getId() {
-			return id;
-		}
-
-		public String getPseudo() {
-			return pseudo;
-		}
+	
+	@JsonProperty("pseudo")
+	public String getPseudo() {
+		return this.donnees.getInfosCompte().getPseudo();
 	}
 
 }

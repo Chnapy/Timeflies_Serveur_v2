@@ -15,6 +15,7 @@ import netserv.Compressed;
 import netserv.NetworkServeur;
 import netserv.Receptable;
 import netserv.Sendable;
+import outils.json.MyJSONParser;
 import salon.Salon;
 
 /**
@@ -37,11 +38,13 @@ public class MMSalonEventCreerSalon extends MMSalonEventListener<RecCreerSalon> 
 
 	@Override
 	public void onEvent(SocketIOClient client, RecCreerSalon data, AckRequest ackSender, Client c) {
-
+try {
 		Salon salon = new Salon(c);
 		SendCreerSalon scs = new SendCreerSalon();
 		scs.setSuccess(true);
-		scs.setSalon(salon.getCompressed());
+		scs.setSalon(salon);
+		
+		System.out.println(MyJSONParser.objectToJSONString(salon));
 
 		client.set(NetworkServeur.CLIENT_SALON, salon);
 		c.addStatut(StatutClient.EN_SALON);
@@ -52,6 +55,9 @@ public class MMSalonEventCreerSalon extends MMSalonEventListener<RecCreerSalon> 
 				.forEach(cl -> cl.getSocketClient().sendEvent(getEvent(), scs));
 
 		this.nspCtn.getSalons().put(salon.getId(), salon);
+} catch(Exception e) {
+	e.printStackTrace();
+}
 	}
 
 	public static class RecCreerSalon extends Receptable {
@@ -60,13 +66,13 @@ public class MMSalonEventCreerSalon extends MMSalonEventListener<RecCreerSalon> 
 
 	public static class SendCreerSalon extends Sendable {
 
-		private Compressed salon;
+		private Salon salon;
 
-		public Compressed getSalon() {
+		public Salon getSalon() {
 			return salon;
 		}
 
-		public void setSalon(Compressed salon) {
+		public void setSalon(Salon salon) {
 			this.salon = salon;
 		}
 

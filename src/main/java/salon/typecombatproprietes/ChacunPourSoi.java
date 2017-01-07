@@ -5,10 +5,13 @@
  */
 package salon.typecombatproprietes;
 
-import main.Const;
+import java.util.Arrays;
+import java.util.List;
 import salon.Salon;
-import salon.SalonEquipe;
 import salon.net.events.NetSalonEventSetProprietes;
+import salon.proprietes.PropNbrPersosTotaux;
+import salon.proprietes.Propriete;
+import salon.proprietes.TypePropriete;
 
 /**
  * ChacunPourSoi.java
@@ -16,20 +19,16 @@ import salon.net.events.NetSalonEventSetProprietes;
  */
 public class ChacunPourSoi extends SalonProprietes {
 
-	private int nbrPersosTotaux;
-
-	public ChacunPourSoi() {
-		this.nbrPersosTotaux = Const.NBR_SALON_PERSOS_TOTAL;
+	public ChacunPourSoi(Salon s) {
+		super(s);
+		this.initProprietes();
 	}
 
-	public int getNbrPersosTotaux() {
-		return nbrPersosTotaux;
-	}
-
-	public void setNbrPersosTotaux(int nbrPersosTotaux) {
-		if (nbrPersosTotaux > 1 && nbrPersosTotaux <= Const.NBR_SALON_PERSOS_TOTAL) {
-			this.nbrPersosTotaux = nbrPersosTotaux;
-		}
+	@Override
+	public List<Propriete> getAllProp() {
+		return Arrays.asList(
+				new PropNbrPersosTotaux(salon)
+		);
 	}
 
 	@Override
@@ -40,20 +39,11 @@ public class ChacunPourSoi extends SalonProprietes {
 		data.setNbr_eq_persos_joueur(null);
 
 		if (data.getNbr_persos_total() != null) {
-			this.setNbrPersosTotaux(data.getNbr_persos_total());
-			data.setNbr_persos_total(this.getNbrPersosTotaux());
+			try {
+				this.setProp(TypePropriete.NBR_PERSOS_TOTAUX, data.getNbr_persos_total());
+			} catch (IllegalArgumentException ex) {
+				data.setNbr_persos_total(this.<PropNbrPersosTotaux>getProp(TypePropriete.NBR_PERSOS_TOTAUX).getValeur());
+			}
 		}
-	}
-
-	@Override
-	public boolean checkProprietes(Salon s) {
-		int nbrTotal = 0;
-		for(SalonEquipe se : s.getEquipes().values()) {
-			nbrTotal += se.size();
-		}
-		if(nbrTotal > this.nbrPersosTotaux) {
-			return false;
-		}
-		return true;
 	}
 }

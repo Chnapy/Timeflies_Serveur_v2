@@ -5,64 +5,35 @@
  */
 package salon.typecombatproprietes;
 
-import main.Const;
+import java.util.Arrays;
+import java.util.List;
 import salon.Salon;
-import salon.SalonEquipe;
 import salon.net.events.NetSalonEventSetProprietes;
+import salon.proprietes.PropNbrEquipe;
+import salon.proprietes.PropNbrPersoClasseEquipeMax;
+import salon.proprietes.PropNbrPersoJoueurEquipeMax;
+import salon.proprietes.PropNbrPersosEquipeMax;
+import salon.proprietes.Propriete;
+import salon.proprietes.TypePropriete;
 
 /**
  * ParEquipe.java
  *
  */
-public class ParEquipe extends SalonProprietes {
+public final class ParEquipe extends SalonProprietes {
 
-	private int nbrEquipe, nbrPersosEquipe, nbrPersosClasse, nbrPersosJoueur;
-
-	public ParEquipe() {
-		this.nbrEquipe = 2;
-		this.nbrPersosEquipe = Const.NBR_SALON_PERSOS_EQUIPE_MAX;
-		this.nbrPersosClasse = -1;
-		this.nbrPersosJoueur = -1;
+	public ParEquipe(Salon s) {
+		super(s);
+		this.initProprietes();
 	}
 
-	public int getNbrEquipe() {
-		return nbrEquipe;
-	}
-
-	public void setNbrEquipe(int nbrEquipe) {
-		if (nbrEquipe > 1 && nbrEquipe <= Const.NBR_SALON_EQUIPE_MAX) {
-			this.nbrEquipe = nbrEquipe;
-		}
-	}
-
-	public int getNbrPersosEquipe() {
-		return nbrPersosEquipe;
-	}
-
-	public void setNbrPersosEquipe(int nbrPersosEquipe) {
-		if (nbrPersosEquipe > 0 && nbrPersosEquipe <= Const.NBR_SALON_PERSOS_EQUIPE_MAX) {
-			this.nbrPersosEquipe = nbrPersosEquipe;
-		}
-	}
-
-	public int getNbrPersosJoueur() {
-		return nbrPersosJoueur;
-	}
-
-	public void setNbrPersosJoueur(int nbrPersosJoueur) {
-		if (nbrPersosJoueur > 0) {
-			this.nbrPersosJoueur = nbrPersosJoueur;
-		}
-	}
-
-	public int getNbrPersosClasse() {
-		return nbrPersosClasse;
-	}
-
-	public void setNbrPersosClasse(int nbrPersosClasse) {
-		if (nbrPersosClasse > 0) {
-			this.nbrPersosClasse = nbrPersosClasse;
-		}
+	@Override
+	public List<Propriete> getAllProp() {
+		return Arrays.asList(new PropNbrEquipe(salon),
+				new PropNbrPersosEquipeMax(salon),
+				new PropNbrPersoClasseEquipeMax(salon),
+				new PropNbrPersoJoueurEquipeMax(salon)
+		);
 	}
 
 	@Override
@@ -70,46 +41,35 @@ public class ParEquipe extends SalonProprietes {
 		data.setNbr_persos_total(null);
 
 		if (data.getNbr_equipe() != null) {
-			this.setNbrEquipe(data.getNbr_equipe());
-			data.setNbr_equipe(getNbrEquipe());
+			try {
+				this.setProp(TypePropriete.NBR_EQUIPES_MAX, data.getNbr_equipe());
+			} catch (IllegalArgumentException ex) {
+				data.setNbr_equipe(this.<PropNbrEquipe>getProp(TypePropriete.NBR_EQUIPES_MAX).getValeur());
+			}
 		}
 
 		if (data.getNbr_eq_persos_classe() != null) {
-			this.setNbrPersosClasse(data.getNbr_eq_persos_classe());
-			data.setNbr_eq_persos_classe(getNbrPersosClasse());
+			try {
+				this.setProp(TypePropriete.NBR_PERSOS_CLASSE_EQUIPE, data.getNbr_eq_persos_classe());
+			} catch (IllegalArgumentException ex) {
+				data.setNbr_eq_persos_classe(this.<PropNbrPersoClasseEquipeMax>getProp(TypePropriete.NBR_PERSOS_CLASSE_EQUIPE).getValeur());
+			}
 		}
 
 		if (data.getNbr_eq_persos_equipe() != null) {
-			this.setNbrPersosEquipe(data.getNbr_eq_persos_equipe());
-			data.setNbr_eq_persos_equipe(getNbrPersosEquipe());
+			try {
+				this.setProp(TypePropriete.NBR_PERSOS_EQUIPE, data.getNbr_eq_persos_equipe());
+			} catch (IllegalArgumentException ex) {
+				data.setNbr_eq_persos_equipe(this.<PropNbrPersosEquipeMax>getProp(TypePropriete.NBR_PERSOS_EQUIPE).getValeur());
+			}
 		}
 
 		if (data.getNbr_eq_persos_joueur() != null) {
-			this.setNbrPersosJoueur(data.getNbr_eq_persos_joueur());
-			data.setNbr_eq_persos_joueur(getNbrPersosJoueur());
-		}
-	}
-
-	@Override
-	public boolean checkProprietes(Salon s) {
-		if (s.getEquipes().size() > this.nbrEquipe) {
-			return false;
-		}
-
-		for (SalonEquipe se : s.getEquipes().values()) {
-			if (se.size() > this.nbrPersosEquipe) {
-				return false;
-			}
-
-			if (se.getNbrMaxMemeClasse() > this.nbrPersosClasse) {
-				return false;
-			}
-
-			if (se.getNbrMaxMemeClient() > this.nbrPersosJoueur) {
-				return false;
+			try {
+				this.setProp(TypePropriete.NBR_PERSOS_JOUEUR_EQUIPE, data.getNbr_eq_persos_joueur());
+			} catch (IllegalArgumentException ex) {
+				data.setNbr_eq_persos_joueur(this.<PropNbrPersoJoueurEquipeMax>getProp(TypePropriete.NBR_PERSOS_JOUEUR_EQUIPE).getValeur());
 			}
 		}
-
-		return true;
 	}
 }

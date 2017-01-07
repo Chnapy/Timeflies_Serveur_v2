@@ -5,6 +5,7 @@
  */
 package salon;
 
+import com.fasterxml.jackson.annotation.JsonValue;
 import combat.arretdeclencheur.CombatArretDeclencheur;
 import salon.typecombatproprietes.ChacunPourSoi;
 import salon.typecombatproprietes.ParEquipe;
@@ -18,14 +19,14 @@ public enum TypeCombat {
 
 	CPS(1, CombatArretDeclencheur.CPS_ARRET_DECLENCHEUR) {
 		@Override
-		public ChacunPourSoi getNewSalonProprietes() {
-			return new ChacunPourSoi();
+		public ChacunPourSoi getNewSalonProprietes(Salon s) {
+			return new ChacunPourSoi(s);
 		}
 	},
 	EQUIPE(2, CombatArretDeclencheur.EQUIPE_ARRET_DECLENCHEUR) {
 		@Override
-		public ParEquipe getNewSalonProprietes() {
-			return new ParEquipe();
+		public ParEquipe getNewSalonProprietes(Salon s) {
+			return new ParEquipe(s);
 		}
 	};
 
@@ -37,6 +38,7 @@ public enum TypeCombat {
 		this.arretDeclencheur = arretDeclencheur;
 	}
 
+	@JsonValue
 	public int getId() {
 		return id;
 	}
@@ -45,7 +47,7 @@ public enum TypeCombat {
 		return arretDeclencheur;
 	}
 
-	public abstract <S extends SalonProprietes> S getNewSalonProprietes();
+	public abstract <S extends SalonProprietes> S getNewSalonProprietes(Salon s);
 
 	public static TypeCombat getFromId(int id) throws IllegalArgumentException {
 		for (TypeCombat t : TypeCombat.values()) {

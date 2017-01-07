@@ -13,6 +13,7 @@ import com.corundumstudio.socketio.AckRequest;
 import com.corundumstudio.socketio.SocketIOClient;
 import general.NetGeneral;
 import general.events.NetGeneralEventCreerPerso.RecCreerPerso;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import main.Const;
@@ -62,14 +63,20 @@ public class NetGeneralEventCreerPerso extends GeneralEventListener<RecCreerPers
 			return;
 		}
 
-		long idJoueur = c.getId();
+//		long idJoueur = c.getId();
 
-		Personnage perso = this.modele.creerPerso(c, id, nom);
-		send.setNewperso(perso.getCompressed());
+		try {
+			Personnage perso = this.modele.creerPerso(c, id, nom);
+			send.setNewperso(perso.getCompressed());
+			send.setSuccess(true);
+
+			c.getPersonnages().put(perso.getIdPersonnage(), perso);
+		} catch (SQLException ex) {
+			Logger.getGlobal().log(Level.SEVERE, null, ex);
+			send.setSuccess(false);
+		}
 
 		client.sendEvent(getEvent(), send);
-
-		c.getPersonnages().put(perso.getIdPersonnage(), perso);
 	}
 
 	private void setSendFailed(SocketIOClient client, SendCreerPerso send) {

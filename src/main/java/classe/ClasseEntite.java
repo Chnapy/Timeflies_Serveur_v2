@@ -5,6 +5,7 @@
  */
 package classe;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,8 +21,13 @@ import netserv.Compressed;
  */
 public abstract class ClasseEntite extends Classe implements Compressable {
 
+	@JsonIgnore
 	private final Set<ClasseSort> sorts;
+	
+	@JsonIgnore
 	private final ClasseXP classeXP;
+	
+	@JsonIgnore
 	private final Map<TypeCPhysique, Integer> cPhysique;
 
 	public ClasseEntite(long id, Set<ClasseSort> sorts, ClasseXP classeXP,

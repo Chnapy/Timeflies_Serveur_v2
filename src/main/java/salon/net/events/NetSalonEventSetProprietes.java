@@ -69,7 +69,7 @@ public class NetSalonEventSetProprietes extends NetSalonEventListener<RecSetProp
 			return idmap;
 		}
 
-		public void setIdmap(int idmap) {
+		public void setIdmap(Integer idmap) {
 			this.idmap = idmap;
 		}
 

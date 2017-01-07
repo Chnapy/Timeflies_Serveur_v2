@@ -43,6 +43,10 @@ public class SalonEquipe extends HashSet<Personnage> implements Compressable {
 		});
 		this.removeAll(toRemove);
 	}
+	
+	public Set<Personnage> getPersosFromClient(Client c) {
+		return this.stream().filter(p -> p.getClient().equals(c)).collect(Collectors.toSet());
+	}
 
 	public int getNbrMaxMemeClasse() {
 		HashMap<ClasseEntite, Integer> nbrClasses = new HashMap();

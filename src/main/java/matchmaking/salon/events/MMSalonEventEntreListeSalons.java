@@ -9,13 +9,12 @@ import client.Client;
 import client.StatutClient;
 import com.corundumstudio.socketio.AckRequest;
 import com.corundumstudio.socketio.SocketIOClient;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Collection;
 import matchmaking.salon.MatchmakingSalon;
 import matchmaking.salon.events.MMSalonEventEntreListeSalons.RecEntreListeSalons;
-import netserv.Compressed;
 import netserv.Receptable;
 import netserv.Sendable;
+import salon.Salon;
 
 /**
  * MMSalonEventEntreListeSalons.java
@@ -34,10 +33,7 @@ public class MMSalonEventEntreListeSalons extends MMSalonEventListener<RecEntreL
 
 		SendEntreListeSalons liste = new SendEntreListeSalons();
 		liste.setSuccess(true);
-		liste.setSalons(this.nspCtn.getSalons().values().stream()
-				.map(s -> s.getCompressed())
-				.collect(Collectors.toList())
-		);
+		liste.setSalons(this.nspCtn.getSalons().values());
 		
 		c.addStatut(StatutClient.LISTE_SALONS);
 		client.sendEvent(getEvent(), liste);
@@ -50,13 +46,13 @@ public class MMSalonEventEntreListeSalons extends MMSalonEventListener<RecEntreL
 
 	public static class SendEntreListeSalons extends Sendable {
 
-		private List<Compressed> salons;
+		private Collection<Salon> salons;
 
-		public List<Compressed> getSalons() {
+		public Collection<Salon> getSalons() {
 			return salons;
 		}
 
-		public void setSalons(List<Compressed> salons) {
+		public void setSalons(Collection<Salon> salons) {
 			this.salons = salons;
 		}
 

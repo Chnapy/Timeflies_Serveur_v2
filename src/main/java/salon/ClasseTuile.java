@@ -5,6 +5,7 @@
  */
 package salon;
 
+import java.util.Optional;
 import map.Position;
 import map.TypeTuile;
 
@@ -14,9 +15,13 @@ import map.TypeTuile;
  */
 public class ClasseTuile {
 	
-	private final TypeTuile type;
-	private final Position position;
-	private final int equipe;
+	private TypeTuile type;
+	private Position position;
+	private Optional<Integer> equipe;
+	
+	public ClasseTuile() {
+		equipe = Optional.empty();
+	}
 	
 	public ClasseTuile(int type, Position position) {
 		this(type, position, -1);
@@ -25,7 +30,36 @@ public class ClasseTuile {
 	public ClasseTuile(int type, Position position, int equipe) {
 		this.type = TypeTuile.getFromId(type);
 		this.position = position;
-		this.equipe = equipe;
+		this.equipe = Optional.of(equipe);
+	}
+
+	public TypeTuile getType() {
+		return type;
+	}
+
+	public void setType(int type) {
+		this.type = TypeTuile.getFromId(type);
+	}
+
+	public Position getPosition() {
+		return position;
+	}
+
+	public void setPosition(Position position) {
+		this.position = position;
+	}
+
+	public Optional<Integer> getEquipe() {
+		return equipe;
+	}
+
+	public void setEquipe(int equipe) {
+		this.equipe = Optional.of(equipe);
+	}
+
+	@Override
+	public String toString() {
+		return "ClasseTuile{" + "type=" + type + ", position=" + position + ", equipe=" + equipe + '}';
 	}
 
 }

@@ -6,6 +6,8 @@
 
 package salon;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 /**
  * TypeVisibilite
  * Enum
@@ -20,6 +22,7 @@ public enum TypeVisibilite {
 		this.id = id;
 	}
 
+	@JsonValue
 	public int getId() {
 		return id;
 	}
