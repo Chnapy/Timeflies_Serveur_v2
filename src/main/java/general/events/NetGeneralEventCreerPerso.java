@@ -17,7 +17,6 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import main.Const;
-import netserv.Compressed;
 import netserv.Receptable;
 import netserv.Sendable;
 
@@ -67,7 +66,7 @@ public class NetGeneralEventCreerPerso extends GeneralEventListener<RecCreerPers
 
 		try {
 			Personnage perso = this.modele.creerPerso(c, id, nom);
-			send.setNewperso(perso.getCompressed());
+			send.setNewperso(perso);
 			send.setSuccess(true);
 
 			c.getPersonnages().put(perso.getIdPersonnage(), perso);
@@ -87,13 +86,13 @@ public class NetGeneralEventCreerPerso extends GeneralEventListener<RecCreerPers
 
 	public static class SendCreerPerso extends Sendable {
 
-		private Compressed newperso;
+		private Personnage newperso;
 
-		public Compressed getNewperso() {
+		public Personnage getNewperso() {
 			return newperso;
 		}
 
-		public void setNewperso(Compressed newperso) {
+		public void setNewperso(Personnage newperso) {
 			this.newperso = newperso;
 		}
 

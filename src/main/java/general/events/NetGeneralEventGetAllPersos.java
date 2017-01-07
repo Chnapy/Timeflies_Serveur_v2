@@ -6,13 +6,12 @@
 package general.events;
 
 import client.Client;
+import client.Personnage;
 import com.corundumstudio.socketio.AckRequest;
 import com.corundumstudio.socketio.SocketIOClient;
 import general.NetGeneral;
 import general.events.NetGeneralEventGetAllPersos.RecGetAllPersos;
 import java.util.Collection;
-import java.util.stream.Collectors;
-import netserv.Compressed;
 import netserv.Receptable;
 import netserv.Sendable;
 
@@ -32,9 +31,7 @@ public class NetGeneralEventGetAllPersos extends GeneralEventListener<RecGetAllP
 	public void onEvent(SocketIOClient client, RecGetAllPersos data, AckRequest ackSender, Client c) {
 		
 		SendGetAllPersos sgap = new SendGetAllPersos();
-		sgap.setPersos(c.getPersonnages().values().stream()
-				.map((p) -> p.getCompressed())
-				.collect(Collectors.toList()));
+		sgap.setPersos(c.getPersonnages().values());
 		sgap.setSuccess(true);
 		
 		client.sendEvent(getEvent(), sgap);
@@ -46,13 +43,13 @@ public class NetGeneralEventGetAllPersos extends GeneralEventListener<RecGetAllP
 	
 	public static class SendGetAllPersos extends Sendable {
 		
-		private Collection<Compressed> persos;
+		private Collection<Personnage> persos;
 
-		public Collection<Compressed> getPersos() {
+		public Collection<Personnage> getPersos() {
 			return persos;
 		}
 
-		public void setPersos(Collection<Compressed> persos) {
+		public void setPersos(Collection<Personnage> persos) {
 			this.persos = persos;
 		}
 		

@@ -15,14 +15,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import netserv.Compressable;
-import netserv.Compressed;
 
 /**
  * SalonEquipe.java
  *
  */
-public class SalonEquipe extends HashSet<Personnage> implements Compressable {
+public class SalonEquipe extends HashSet<Personnage>  {
 
 	private final int id;
 
@@ -60,28 +58,28 @@ public class SalonEquipe extends HashSet<Personnage> implements Compressable {
 		return Collections.max(nbrClasses.values());
 	}
 
-	@Override
-	public Compressed getCompressed() {
-		return new SalonEquipeCompressed(this);
-	}
-
-	public class SalonEquipeCompressed implements Compressed {
-
-		private final int id;
-		private final Set<Compressed> persos;
-
-		public SalonEquipeCompressed(SalonEquipe se) {
-			id = se.getId();
-			persos = se.stream().map(p -> p.getCompressed()).collect(Collectors.toSet());
-		}
-
-		public int getId() {
-			return id;
-		}
-
-		public Set<Compressed> getPersos() {
-			return persos;
-		}
-	}
+//	@Override
+//	public Compressed getCompressed() {
+//		return new SalonEquipeCompressed(this);
+//	}
+//
+//	public class SalonEquipeCompressed implements Compressed {
+//
+//		private final int id;
+//		private final Set<Compressed> persos;
+//
+//		public SalonEquipeCompressed(SalonEquipe se) {
+//			id = se.getId();
+//			persos = se.stream().map(p -> p.getCompressed()).collect(Collectors.toSet());
+//		}
+//
+//		public int getId() {
+//			return id;
+//		}
+//
+//		public Set<Compressed> getPersos() {
+//			return persos;
+//		}
+//	}
 
 }

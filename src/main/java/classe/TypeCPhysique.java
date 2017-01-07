@@ -6,6 +6,8 @@
 
 package classe;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 /**
  * TypeCPhysique
  * Enum
@@ -27,8 +29,18 @@ public enum TypeCPhysique {
 		this.id = id;
 	}
 
+	@JsonValue
 	public int getId() {
 		return id;
+	}
+	
+	public static TypeCPhysique getFromId(int id) throws IllegalArgumentException {
+		for(TypeCPhysique tc : values()) {
+			if(tc.getId() == id) {
+				return tc;
+			}
+		}
+		throw new IllegalArgumentException("id : " + id);
 	}
 
 }

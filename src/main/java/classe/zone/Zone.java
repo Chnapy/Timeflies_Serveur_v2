@@ -5,6 +5,7 @@
  */
 package classe.zone;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -17,6 +18,7 @@ import map.Position;
  */
 public abstract class Zone {
 
+	@JsonIgnore
 	private final Set<CoucheZone> couches;
 
 	//Origine = (0,0)

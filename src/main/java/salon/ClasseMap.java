@@ -7,14 +7,12 @@ package salon;
 
 import java.util.Set;
 import java.util.stream.Collectors;
-import netserv.Compressable;
-import netserv.Compressed;
 
 /**
  * ClasseMap.java
  *
  */
-public class ClasseMap implements Compressable {
+public class ClasseMap  {
 
 	private String nom, description;
 	private long idcreateur;
@@ -125,54 +123,54 @@ public class ClasseMap implements Compressable {
 		return "ClasseMap{" + "nom=" + nom + ", description=" + description + ", versionMajeure=" + versionMajeure + ", versionMineure=" + versionMineure + ", nbrEquipeMax=" + nbrequipemax + ", nbrPersosEquipeMax=" + nbrpersosequipemax + ", difficulte=" + difficulte + ", tuiles=" + tuiles + '}';
 	}
 
-	@Override
-	public Compressed getCompressed() {
-		return new ClasseMapCompressed(this);
-	}
-
-	public class ClasseMapCompressed implements Compressed {
-
-		private final String nom, description;
-		private final int versionMajeure, versionMineure,
-				nbrEquipeMax, nbrPersosEquipeMax, difficulte;
-
-		public ClasseMapCompressed(ClasseMap map) {
-			nom = map.getNom();
-			description = map.getDescription();
-			versionMajeure = map.getVersionMajeure();
-			versionMineure = map.getVersionMineure();
-			nbrEquipeMax = map.getNbrequipemax();
-			nbrPersosEquipeMax = map.getNbrpersosequipemax();
-			difficulte = map.getDifficulte();
-		}
-
-		public String getNom() {
-			return nom;
-		}
-
-		public String getDescription() {
-			return description;
-		}
-
-		public int getVersionMajeure() {
-			return versionMajeure;
-		}
-
-		public int getVersionMineure() {
-			return versionMineure;
-		}
-
-		public int getNbrEquipeMax() {
-			return nbrEquipeMax;
-		}
-
-		public int getNbrpersosequipemax() {
-			return nbrPersosEquipeMax;
-		}
-
-		public int getDifficulte() {
-			return difficulte;
-		}
-	}
+//	@Override
+//	public Compressed getCompressed() {
+//		return new ClasseMapCompressed(this);
+//	}
+//
+//	public class ClasseMapCompressed implements Compressed {
+//
+//		private final String nom, description;
+//		private final int versionMajeure, versionMineure,
+//				nbrEquipeMax, nbrPersosEquipeMax, difficulte;
+//
+//		public ClasseMapCompressed(ClasseMap map) {
+//			nom = map.getNom();
+//			description = map.getDescription();
+//			versionMajeure = map.getVersionMajeure();
+//			versionMineure = map.getVersionMineure();
+//			nbrEquipeMax = map.getNbrequipemax();
+//			nbrPersosEquipeMax = map.getNbrpersosequipemax();
+//			difficulte = map.getDifficulte();
+//		}
+//
+//		public String getNom() {
+//			return nom;
+//		}
+//
+//		public String getDescription() {
+//			return description;
+//		}
+//
+//		public int getVersionMajeure() {
+//			return versionMajeure;
+//		}
+//
+//		public int getVersionMineure() {
+//			return versionMineure;
+//		}
+//
+//		public int getNbrEquipeMax() {
+//			return nbrEquipeMax;
+//		}
+//
+//		public int getNbrpersosequipemax() {
+//			return nbrPersosEquipeMax;
+//		}
+//
+//		public int getDifficulte() {
+//			return difficulte;
+//		}
+//	}
 
 }

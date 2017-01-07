@@ -5,23 +5,26 @@
  */
 package general.events;
 
+import classe.ClasseEntite;
+import classe.ClasseEnvoutement;
 import classe.ClasseManager;
+import classe.ClasseSort;
 import client.Client;
 import com.corundumstudio.socketio.AckRequest;
 import com.corundumstudio.socketio.SocketIOClient;
 import general.NetGeneral;
 import general.events.NetGeneralEventGetAllClasseEntites.RecGetAllClasseEntites;
 import java.util.Map;
-import netserv.Compressed;
 import netserv.Receptable;
 import netserv.Sendable;
+import outils.json.MyJSONParser;
 
 /**
  * NetGeneralEventGetAllClasseEntites.java
- * 
+ *
  */
 public class NetGeneralEventGetAllClasseEntites extends GeneralEventListener<RecGetAllClasseEntites> {
-	
+
 	private static final String SUFFIX = "getallclasses";
 
 	public NetGeneralEventGetAllClasseEntites(NetGeneral nspCtn) {
@@ -30,47 +33,53 @@ public class NetGeneralEventGetAllClasseEntites extends GeneralEventListener<Rec
 
 	@Override
 	public void onEvent(SocketIOClient client, RecGetAllClasseEntites data, AckRequest ackSender, Client c) {
+		try {
 		SendGetAllClasseEntites sgace = new SendGetAllClasseEntites();
 		sgace.setClasseEntites(
-				ClasseManager.getCompressedEnvoutements(),
-				ClasseManager.getCompressedSorts(),
-				ClasseManager.getCompressedEntites()
+				ClasseManager.getEnvoutements(),
+				ClasseManager.getSorts(),
+				ClasseManager.getEntites()
 		);
 		sgace.setSuccess(true);
 		
-		client.sendEvent(getEvent(), sgace);
-	}
-	
-	public static class RecGetAllClasseEntites extends Receptable {
-		
-	}
-	
-	public static class SendGetAllClasseEntites extends Sendable {
-		
-		private Map<Long, Compressed> classeEnvoutements;
-		private Map<Long, Compressed> classeSorts;
-		private Map<Long, Compressed> classeEntites;
+			System.out.println(MyJSONParser.objectToJSONString(sgace));
 
-		public void setClasseEntites(Map<Long, Compressed> classeEnvoutements, 
-				Map<Long, Compressed> classeSorts, 
-				Map<Long, Compressed> classeEntites) {
+		client.sendEvent(getEvent(), sgace);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static class RecGetAllClasseEntites extends Receptable {
+
+	}
+
+	public static class SendGetAllClasseEntites extends Sendable {
+
+		private Map<Long, ? extends ClasseEnvoutement> classeEnvoutements;
+		private Map<Long, ? extends ClasseSort> classeSorts;
+		private Map<Long, ? extends ClasseEntite> classeEntites;
+
+		public void setClasseEntites(Map<Long, ClasseEnvoutement> classeEnvoutements,
+				Map<Long, ClasseSort> classeSorts,
+				Map<Long, ClasseEntite> classeEntites) {
 			this.classeEnvoutements = classeEnvoutements;
 			this.classeSorts = classeSorts;
 			this.classeEntites = classeEntites;
 		}
 
-		public Map<Long, Compressed> getClasseEnvoutements() {
+		public Map<Long, ? extends ClasseEnvoutement> getClasseEnvoutements() {
 			return classeEnvoutements;
 		}
 
-		public Map<Long, Compressed> getClasseSorts() {
+		public Map<Long, ? extends ClasseSort> getClasseSorts() {
 			return classeSorts;
 		}
 
-		public Map<Long, Compressed> getClasseEntites() {
+		public Map<Long, ? extends ClasseEntite> getClasseEntites() {
 			return classeEntites;
 		}
-		
+
 	}
 
 }

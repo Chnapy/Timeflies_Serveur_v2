@@ -11,7 +11,6 @@ import com.corundumstudio.socketio.AckRequest;
 import com.corundumstudio.socketio.SocketIOClient;
 import matchmaking.salon.MatchmakingSalon;
 import matchmaking.salon.events.MMSalonEventCreerSalon.RecCreerSalon;
-import netserv.Compressed;
 import netserv.NetworkServeur;
 import netserv.Receptable;
 import netserv.Sendable;

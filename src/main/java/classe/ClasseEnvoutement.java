@@ -5,20 +5,23 @@
  */
 package classe;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.List;
-import netserv.Compressable;
-import netserv.Compressed;
 
 /**
  * ClasseEnvoutement.java
  *
  */
-public abstract class ClasseEnvoutement extends Classe implements Compressable {
+public abstract class ClasseEnvoutement extends Classe {
 
 	public static final int DUREE_INFINI = -1;
 
+	@JsonIgnore
 	private final List<Declencheur> declencheurs;
+	
+	@JsonIgnore
 	private final List<Effet> effets;
+	
 	private final int duree;
 
 	public ClasseEnvoutement(long id, List<Declencheur> declencheurs, List<Effet> effets, int duree) {
@@ -38,31 +41,6 @@ public abstract class ClasseEnvoutement extends Classe implements Compressable {
 
 	public int getDuree() {
 		return duree;
-	}
-
-	@Override
-	public Compressed getCompressed() {
-		return new ClasseEnvoutementCompressed(this);
-	}
-
-	public class ClasseEnvoutementCompressed implements Compressed {
-
-		private long id;
-		private int duree;
-
-		public ClasseEnvoutementCompressed(ClasseEnvoutement ce) {
-			this.id = ce.getId();
-			this.duree = ce.getDuree();
-		}
-
-		public long getId() {
-			return id;
-		}
-
-		public int getDuree() {
-			return duree;
-		}
-
 	}
 
 }

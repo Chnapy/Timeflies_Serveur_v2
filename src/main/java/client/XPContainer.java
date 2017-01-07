@@ -6,17 +6,13 @@
 package client;
 
 import classe.ClasseXP;
-import client.XPContainer.XPCompressed;
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import netserv.Compressable;
-import netserv.Compressed;
 
 /**
  * XPContainer.java
  * 
  */
-public class XPContainer implements Compressable {
+public class XPContainer {
 	
 	private int xp;
 	
@@ -51,48 +47,42 @@ public class XPContainer implements Compressable {
 	public void addXp(int add) {
 		this.xp += add;
 	}
-
-	@JsonAnyGetter
-	@Override
-	public Compressed getCompressed() {
-		return new XPCompressed(this);
-	}
 	
-	public class XPCompressed implements Compressed {
-		
-		private int niveau;
-		private int xpActu;
-		private int xpRestantTotal;
-
-		private XPCompressed(XPContainer cont) {
-			this.niveau = cont.getNiveau();
-			this.xpActu = cont.getXPActu();
-			this.xpRestantTotal = this.xpActu + cont.getXPRestant();
-		}
-
-		public int getNiveau() {
-			return niveau;
-		}
-
-		public void setNiveau(int niveau) {
-			this.niveau = niveau;
-		}
-
-		public int getXpActu() {
-			return xpActu;
-		}
-
-		public void setXpActu(int xpActu) {
-			this.xpActu = xpActu;
-		}
-
-		public int getXpRestantTotal() {
-			return xpRestantTotal;
-		}
-
-		public void setXpRestantTotal(int xpRestantTotal) {
-			this.xpRestantTotal = xpRestantTotal;
-		}
-	}
+//	public class XPCompressed implements Compressed {
+//		
+//		private int niveau;
+//		private int xpActu;
+//		private int xpRestantTotal;
+//
+//		private XPCompressed(XPContainer cont) {
+//			this.niveau = cont.getNiveau();
+//			this.xpActu = cont.getXPActu();
+//			this.xpRestantTotal = this.xpActu + cont.getXPRestant();
+//		}
+//
+//		public int getNiveau() {
+//			return niveau;
+//		}
+//
+//		public void setNiveau(int niveau) {
+//			this.niveau = niveau;
+//		}
+//
+//		public int getXpActu() {
+//			return xpActu;
+//		}
+//
+//		public void setXpActu(int xpActu) {
+//			this.xpActu = xpActu;
+//		}
+//
+//		public int getXpRestantTotal() {
+//			return xpRestantTotal;
+//		}
+//
+//		public void setXpRestantTotal(int xpRestantTotal) {
+//			this.xpRestantTotal = xpRestantTotal;
+//		}
+//	}
 
 }

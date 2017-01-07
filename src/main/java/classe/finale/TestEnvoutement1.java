@@ -17,16 +17,16 @@ import java.util.Arrays;
  */
 public class TestEnvoutement1 extends ClasseEnvoutement {
 	
-	public static final long ID = 1;
+//	public static final long ID = 1;
 
-	public TestEnvoutement1() {
-		super(ID, Arrays.asList((Declencheur) (Effet effet) -> {
+	public TestEnvoutement1(long id, int nbrTours) {
+		super(id, Arrays.asList((Declencheur) (Effet effet) -> {
 			return effet == Effet.DEBUT_COMBAT;
 		}), Arrays.asList((Effet) (tuile, cible, lanceur) -> {
 			lanceur.getcPhysique().merge(TypeCPhysique.VITESSE, 10, (t, u) -> 
 				t + u
 			);
-		}), -1);
+		}), nbrTours);
 	}
 
 }
