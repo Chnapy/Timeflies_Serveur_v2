@@ -25,20 +25,20 @@ public class Personnage {
 	private final long idPersonnage;
 	private final String nom;
 	private final ClasseEntite classe;
-	private final XPContainer persoXP;
+	private final PersoXPContainer persoXP;
 	private final Map<ClasseSort, XPContainer> sortXP;
 
-	public Personnage(Client client, long idPersonnage, String nom, long idClasse, Map<Long, Integer> sortXP) {
+	public Personnage(Client client, long idPersonnage, String nom, long idClasse, Map<Long, Integer> sXP) {
 		this.client = client;
 		this.idPersonnage = idPersonnage;
 		this.nom = nom;
 		this.classe = ClasseManager.getEntiteFromId(idClasse);
-		this.persoXP = new XPContainer(-1, classe.getClasseXP());
 		this.sortXP = new HashMap();
-		sortXP.forEach((Long idClasseSort, Integer xp) -> {
+		sXP.forEach((idClasseSort, xp) -> {
 			ClasseSort c = ClasseManager.getSortFromId(idClasseSort);
 			this.sortXP.put(c, new XPContainer(xp, c.getClasseXP()));
 		});
+		this.persoXP = new PersoXPContainer(this.sortXP, classe.getClasseXP());
 	}
 
 	public Client getClient() {
@@ -57,7 +57,7 @@ public class Personnage {
 		return classe;
 	}
 
-	public XPContainer getPersoXP() {
+	public PersoXPContainer getPersoXP() {
 		return persoXP;
 	}
 

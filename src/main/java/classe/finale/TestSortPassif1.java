@@ -5,15 +5,15 @@
  */
 package classe.finale;
 
-import classe.ClasseManager;
+import classe.ClasseEnvoutement;
 import classe.ClasseSort;
 import classe.ClasseXP;
 import classe.Effet;
-import classe.FonctionXP;
 import classe.TypeCPhysique;
-import combat.CombatEnvoutement;
+import classe.zone.Zone;
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * TestSortPassif1.java
@@ -21,12 +21,10 @@ import java.util.Map;
  */
 public class TestSortPassif1 extends ClasseSort {
 
-	public TestSortPassif1(long id, Map<TypeCPhysique, Integer> cphysique, ClasseXP classeXP, int xpParUse, int pourcDegressifXP) {
-		super(id, Arrays.asList((Effet) (tuile, cible, lanceur) -> {
-			lanceur.getEnvoutements().add(new CombatEnvoutement(
-					ClasseManager.getEnvoutementFromClass(TestEnvoutement1.class))
-			);
-		}), cphysique, classeXP, xpParUse, pourcDegressifXP);
+	public TestSortPassif1(long id, boolean actif, Map<TypeCPhysique, Integer> cphysique, ClasseXP classeXP, 
+			int xpParUse, int pourcDegressifXP, Zone zonePortee, Zone zoneAction, Set<ClasseEnvoutement> envoutements) {
+		super(id, actif, Arrays.asList((Effet) (tuile, cible, lanceur) -> {
+		}), cphysique, classeXP, xpParUse, pourcDegressifXP, zonePortee, zoneAction, envoutements);
 	}
 
 }

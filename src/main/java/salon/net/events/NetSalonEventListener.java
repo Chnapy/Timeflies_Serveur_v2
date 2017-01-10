@@ -31,7 +31,7 @@ public abstract class NetSalonEventListener<R extends Receptable> extends EventL
 	public boolean isEventRecevable(SocketIOClient client, R data) {
 		Client c = client.get(NetworkServeur.CLIENT_CLIENT);
 		Salon s = client.get(NetworkServeur.CLIENT_SALON);
-		return c != null && c.hasStatut(StatutClient.EN_SALON) && s != null;
+		return c != null && c.hasStatut(StatutClient.EN_SALON) && s != null && !s.isLock();
 	}
 
 	@Override

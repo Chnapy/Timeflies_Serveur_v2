@@ -5,6 +5,7 @@
  */
 package salon;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -19,6 +20,8 @@ public class ClasseMap  {
 	private int versionMajeure, versionMineure,
 			nbrequipemax, nbrpersosequipemax, difficulte;
 	private Set<TypeCombat> typecombat;
+	
+	@JsonIgnore
 	private Set<ClasseTuile> tuiles;
 
 	public ClasseMap() {

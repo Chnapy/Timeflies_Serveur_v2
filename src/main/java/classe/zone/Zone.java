@@ -16,7 +16,7 @@ import map.Position;
  * Zone.java
  *
  */
-public abstract class Zone {
+public class Zone {
 
 	@JsonIgnore
 	private final Set<CoucheZone> couches;
@@ -60,6 +60,14 @@ public abstract class Zone {
 		});
 		
 		return ret;
+	}
+
+	public Set<Position> getPositions() {
+		return positions;
+	}
+
+	public int getRayon() {
+		return rayon;
 	}
 
 }

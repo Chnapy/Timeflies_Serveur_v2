@@ -37,9 +37,9 @@ public class PropMap extends ProprieteLimite<ClasseMap, Integer> {
 		int nbr_perso_equipe_max = map.getNbrpersosequipemax();
 		
 		PropTypeCombat ptc = salon.<PropTypeCombat>getProp(TypePropriete.TYPECOMBAT);
-		ptc.setWhitelist(typecombats);
 		ptc.setMin(null);
 		ptc.setMax(null);
+		ptc.setWhitelist(typecombats);
 		
 		salon.<PropNbrEquipe>getProp(TypePropriete.NBR_EQUIPES_MAX).setMax(nbr_equipe_max);
 		

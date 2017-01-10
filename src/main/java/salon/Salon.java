@@ -18,6 +18,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.logging.Logger;
 import main.Const;
+import netserv.Sendable;
 import salon.net.NetSalon;
 import salon.net.events.NetSalonEventSetProprietes;
 import salon.proprietes.Propriete;
@@ -34,24 +35,28 @@ import salon.proprietes.TypePropriete;
  */
 public class Salon extends Proprietable {
 
-	private static int newID = 0;
+//	private static int newID = 0;
 
-	private final int id;
-	
+	private final long id;
+
 	@JsonIgnore
 	private final ModeleSalon modele;
-	
+
 	private final Map<Client, Boolean> clients;
 	private Client dirigeant;
 	private final Map<Integer, SalonEquipe> equipes;
 
-	public Salon(Client client) {
-		this.id = getNewId();
+//	@JsonIgnore
+	private boolean lock;
+
+	public Salon(long id, Client client) {
+		this.id = id;
 		this.modele = new ModeleSalon();
 		this.clients = new HashMap();
 		this.clients.put(client, false);
 		this.dirigeant = client;
 		this.equipes = new HashMap();
+		this.lock = false;
 
 		this.initProprietes();
 	}
@@ -75,11 +80,11 @@ public class Salon extends Proprietable {
 		}
 	}
 
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void sendToAll(String event, Object... obj) {
+	public void sendToAll(String event, Sendable obj) {
 		this.clients.keySet().forEach(c -> c.getSocketClient().sendEvent(event, obj));
 	}
 
@@ -91,9 +96,16 @@ public class Salon extends Proprietable {
 		return equipes;
 	}
 
-	public void removeClient(Client c) {
+	public boolean removeClient(Client c) {
 		this.equipes.values().forEach(e -> e.removeClient(c));
 		this.clients.remove(c);
+
+		if (this.clients.isEmpty()) {
+			return true;
+		} else if (this.dirigeant.equals(c)) {
+			this.setDirigeant(this.clients.keySet().iterator().next());
+		}
+		return false;
 	}
 
 	public void addClient(Client c) {
@@ -112,8 +124,8 @@ public class Salon extends Proprietable {
 
 	@Override
 	public int hashCode() {
-		int hash = 5;
-		hash = 71 * hash + this.id;
+		int hash = 7;
+		hash = 89 * hash + (int) (this.id ^ (this.id >>> 32));
 		return hash;
 	}
 
@@ -143,45 +155,55 @@ public class Salon extends Proprietable {
 		return ret;
 	}
 
-	private static int getNewId() {
-		newID++;
-		return newID;
-	}
-
 	public boolean setPret(Client c, boolean pret) {
 		boolean ret = this.clients.get(c) != pret
 				&& getClientEquipe(c).isPresent();
 
 		if (ret) {
 			this.clients.merge(c, pret, (cl, val) -> pret);
+			defLock();
 		}
 
 		return ret;
+	}
+
+	private void defLock() {
+		this.lock = this.clients.values().stream().allMatch(b -> b);
+	}
+
+	public boolean isLock() {
+		return lock;
 	}
 
 	public Optional<SalonEquipe> getClientEquipe(Client c) {
 		return this.equipes.values().stream().filter(se -> !se.getPersosFromClient(c).isEmpty()).findAny();
 	}
 
-	public boolean ajouterPerso(Client c, long idperso, int idequipe) {
+	public Optional<Personnage> ajouterPerso(Client c, long idperso, int idequipe) {
 		if (this.clients.get(c) != false) {
-			return false;
+			return Optional.empty();
 		}
 
 		Personnage p = c.getPersonnages().get(idperso);
 		if (p == null) {
-			return false;
+			return Optional.empty();
 		}
 
 		SalonEquipe se = this.equipes.get(idequipe);
 		if (se == null || se.contains(p)) {
-			return false;
+			return Optional.empty();
 		}
 
 		Optional<SalonEquipe> op = getEquipeOfPerso(p);
 		op.ifPresent(sef -> sef.removeClient(c));
 
-		return this.<PropTypeCombat>getProp(TypePropriete.NBR_PERSOS_CLASSE).getTypeCombatProprietes().ajouterPerso(p, se);
+		boolean success = this.<PropTypeCombat>getProp(TypePropriete.NBR_PERSOS_CLASSE).getTypeCombatProprietes().ajouterPerso(p, se);
+
+		if (success) {
+			return Optional.of(p);
+		} else {
+			return Optional.empty();
+		}
 //		se.add(p);
 //
 //		if (!checkProprietes()) {
@@ -191,18 +213,18 @@ public class Salon extends Proprietable {
 //		return true;
 	}
 
-	public boolean retraitPerso(Client c, long idperso) {
+	public Optional<Personnage> retraitPerso(Client c, long idperso) {
 		if (this.clients.get(c) != false) {
-			return false;
+			return Optional.empty();
 		}
 
 		Personnage p = c.getPersonnages().get(idperso);
 		if (p == null) {
-			return false;
+			return Optional.empty();
 		}
 
 		this.equipes.values().forEach((se) -> se.remove(p));
-		return true;
+		return Optional.of(p);
 	}
 
 	public Optional<SalonEquipe> getEquipeOfPerso(Personnage p) {
@@ -264,12 +286,12 @@ public class Salon extends Proprietable {
 	public ModeleSalon getModele() {
 		return modele;
 	}
-	
+
 	@JsonGetter("clients")
 	public Set<Client> getJSONClients() {
 		return this.clients.keySet();
 	}
-	
+
 	@JsonGetter("equipes")
 	public Collection<SalonEquipe> getJSONEquipes() {
 		return this.equipes.values();

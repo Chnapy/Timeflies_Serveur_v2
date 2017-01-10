@@ -42,6 +42,7 @@ public class MMSalonEventSortListeSalons extends MMSalonEventListener<RecSortLis
 		c.removeStatut(StatutClient.EN_SALON);
 		client.sendEvent(getEvent(), ssls);
 
+		this.nspCtn.getClients().remove(client.getSessionId());
 	}
 
 	public static class RecSortListeSalons extends Receptable {

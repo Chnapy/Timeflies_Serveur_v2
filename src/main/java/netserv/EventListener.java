@@ -5,9 +5,12 @@
  */
 package netserv;
 
+import client.Client;
+import client.StatutClient;
 import com.corundumstudio.socketio.AckRequest;
 import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.listener.DataListener;
+import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -19,6 +22,8 @@ import java.util.logging.Logger;
  * @param <C>
  */
 public abstract class EventListener<N extends NamespaceContainer, M extends Modele, C extends Receptable> extends NetworkListener<N> implements DataListener<C> {
+	
+	public static final String SEPARATEUR = "_";
 
 	private final String suffixe;
 	private String prefixe;
@@ -37,7 +42,11 @@ public abstract class EventListener<N extends NamespaceContainer, M extends Mode
 	}
 
 	public String getEvent() {
-		return prefixe + "_" + suffixe;
+		return getEvent(suffixe);
+	}
+	
+	public String getEvent(String suffixe) {
+		return prefixe + SEPARATEUR + suffixe;
 	}
 
 	public Class<?> getDataClass() {
@@ -63,6 +72,16 @@ public abstract class EventListener<N extends NamespaceContainer, M extends Mode
 	protected boolean isEventRecevable(SocketIOClient client, C data) {
 		return true;
 	}
-;
+
+	protected void sendEventToHasStatuts(Sendable send, StatutClient... statuts) {
+		this.sendEventToHasStatuts(send, getEvent(), statuts);
+	}
+
+	protected void sendEventToHasStatuts(Sendable send, String event, StatutClient... statuts) {
+		Collection<Client> clients = this.nspCtn.getClients().values();
+		clients.stream()
+				.filter((Client cl) -> cl.hasStatut(statuts))
+				.forEach(cl -> cl.getSocketClient().sendEvent(event, send));
+	}
 
 }

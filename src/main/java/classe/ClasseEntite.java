@@ -7,12 +7,10 @@ package classe;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import java.util.HashMap;
-import java.util.List;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
-import javafx.util.Pair;
 
 /**
  * ClasseEntite.java
@@ -26,13 +24,16 @@ public abstract class ClasseEntite extends Classe {
 	private final ClasseXP classeXP;
 
 	private final Map<TypeCPhysique, Integer> cPhysique;
+	
+	private final boolean actif;
 
-	public ClasseEntite(long id, Set<ClasseSort> sorts, ClasseXP classeXP,
+	public ClasseEntite(long id, boolean actif, Set<ClasseSort> sorts, ClasseXP classeXP,
 			Map<TypeCPhysique, Integer> cPhysique) {
 		super(id);
-		this.sorts = sorts;
+		this.actif = actif;
+		this.sorts = Collections.unmodifiableSet(sorts);
 		this.classeXP = classeXP;
-		this.cPhysique = cPhysique;
+		this.cPhysique = Collections.unmodifiableMap(cPhysique);
 	}
 
 	public Set<ClasseSort> getSorts() {
@@ -45,6 +46,10 @@ public abstract class ClasseEntite extends Classe {
 
 	public Map<TypeCPhysique, Integer> getcPhysique() {
 		return cPhysique;
+	}
+
+	public boolean isActif() {
+		return actif;
 	}
 
 	@JsonGetter("sorts")

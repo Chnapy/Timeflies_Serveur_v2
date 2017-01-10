@@ -45,8 +45,7 @@ public class NetSalonEventSetProprietes extends NetSalonEventListener<RecSetProp
 		ssp.set(data);
 		ssp.setSuccess(true);
 
-		s.getClients().keySet().forEach(cl
-				-> cl.getSocketClient().sendEvent(getEvent(), ssp));
+		s.sendToAll(getEvent(), ssp);
 
 	}
 

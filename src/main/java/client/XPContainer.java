@@ -6,7 +6,6 @@
 package client;
 
 import classe.ClasseXP;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * XPContainer.java
@@ -16,7 +15,7 @@ public class XPContainer {
 	
 	private int xp;
 	
-	@JsonIgnore
+//	@JsonIgnore
 	private final ClasseXP classeXP;
 	
 	public XPContainer(int xp, ClasseXP classeXP) {
@@ -47,42 +46,9 @@ public class XPContainer {
 	public void addXp(int add) {
 		this.xp += add;
 	}
-	
-//	public class XPCompressed implements Compressed {
-//		
-//		private int niveau;
-//		private int xpActu;
-//		private int xpRestantTotal;
-//
-//		private XPCompressed(XPContainer cont) {
-//			this.niveau = cont.getNiveau();
-//			this.xpActu = cont.getXPActu();
-//			this.xpRestantTotal = this.xpActu + cont.getXPRestant();
-//		}
-//
-//		public int getNiveau() {
-//			return niveau;
-//		}
-//
-//		public void setNiveau(int niveau) {
-//			this.niveau = niveau;
-//		}
-//
-//		public int getXpActu() {
-//			return xpActu;
-//		}
-//
-//		public void setXpActu(int xpActu) {
-//			this.xpActu = xpActu;
-//		}
-//
-//		public int getXpRestantTotal() {
-//			return xpRestantTotal;
-//		}
-//
-//		public void setXpRestantTotal(int xpRestantTotal) {
-//			this.xpRestantTotal = xpRestantTotal;
-//		}
-//	}
 
+	public ClasseXP getClasseXP() {
+		return classeXP;
+	}
+	
 }

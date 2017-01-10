@@ -37,6 +37,8 @@ public class MMSalonEventEntreListeSalons extends MMSalonEventListener<RecEntreL
 		
 		c.addStatut(StatutClient.LISTE_SALONS);
 		client.sendEvent(getEvent(), liste);
+		
+		this.nspCtn.getClients().put(client.getSessionId(), c);
 
 	}
 

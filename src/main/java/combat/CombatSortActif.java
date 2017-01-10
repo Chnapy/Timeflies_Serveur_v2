@@ -5,23 +5,24 @@
  */
 package combat;
 
-import classe.ClasseSortActif;
+import classe.ClasseSort;
+import client.XPContainer;
 
 /**
  * CombatSortActif.java
  * 
  */
-public class CombatSortActif extends CombatClasse<ClasseSortActif> {
+public class CombatSortActif extends CombatClasse<ClasseSort> {
 	
-	private final int niveau;
+	private final XPContainer sortXP;
 
-	public CombatSortActif(ClasseSortActif classe, int niveau) {
+	public CombatSortActif(ClasseSort classe, XPContainer niveau) {
 		super(classe);
-		this.niveau = niveau;
+		this.sortXP = niveau;
 	}
 
-	public int getNiveau() {
-		return niveau;
+	public XPContainer getSortXP() {
+		return sortXP;
 	}
 
 }

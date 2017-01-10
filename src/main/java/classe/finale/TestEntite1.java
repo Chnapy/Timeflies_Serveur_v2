@@ -18,9 +18,9 @@ import java.util.Set;
  */
 public class TestEntite1 extends ClasseEntite {
 
-	public TestEntite1(long id, Set<ClasseSort> sorts, ClasseXP classeXP,
+	public TestEntite1(long id, boolean actif, Set<ClasseSort> sorts, ClasseXP classeXP,
 			Map<TypeCPhysique, Integer> cPhysique) {
-		super(id, sorts, classeXP, cPhysique);
+		super(id, actif, sorts, classeXP, cPhysique);
 	}
 
 }

@@ -6,14 +6,13 @@
 package combat.entite;
 
 import classe.ClasseEntite;
-import classe.TypeCPhysique;
+import classe.ClasseSort;
 import client.Client;
+import client.XPContainer;
 import combat.CombatSortActif;
 import combat.CombatEquipe;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import javafx.util.Pair;
 
 /**
  * CombatEntiteActive.java
@@ -24,13 +23,15 @@ public class CombatEntiteActive extends CombatEntite {
 	private final Map<Long, CombatSortActif> sortsActif;
 
 	public CombatEntiteActive(Client client, ClasseEntite classe, int niveau, CombatEquipe equipe,
-			List<Pair<TypeCPhysique, Integer>> cPhysique,
-			List<Pair<TypeCPhysique, Integer>> cPhysiqueMax,
-			List<CombatSortActif> sortsActif
-	) {
-		super(client, classe, niveau, equipe, cPhysique, cPhysiqueMax);
+			Map<ClasseSort, XPContainer> sorts) {
+		super(client, classe, niveau, equipe);
+
 		this.sortsActif = new HashMap();
-		sortsActif.forEach((s) -> this.sortsActif.put(s.getClasse().getId(), s));
+		sorts.forEach((cs, xp) -> {
+			if (cs.isActif()) {
+				this.sortsActif.put(cs.getId(), new CombatSortActif(cs, xp));
+			}
+		});
 	}
 
 	public Map<Long, CombatSortActif> getSortsActif() {

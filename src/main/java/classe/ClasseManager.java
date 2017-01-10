@@ -7,7 +7,6 @@ package classe;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * ClasseManager.java
@@ -17,8 +16,8 @@ public class ClasseManager {
 
 	private static final ModeleClasseManager MODELE = new ModeleClasseManager();
 
-	private static final HashMap<Class<? extends ClasseEnvoutement>, ClasseEnvoutement> ENVOUTEMENTS = new HashMap();
-	private static final HashMap<Class<? extends ClasseSort>, ClasseSort> SORTS = new HashMap();
+	private static final HashMap<Long, ClasseEnvoutement> ENVOUTEMENTS = new HashMap();
+	private static final HashMap<Long, ClasseSort> SORTS = new HashMap();
 	private static final HashMap<Long, ClasseEntite> ENTITES = new HashMap();
 
 	public static void start() {
@@ -28,29 +27,31 @@ public class ClasseManager {
 	}
 
 	private static void chargerEnvoutements() {
-		MODELE.getAllEnvoutements().forEach(e -> ENVOUTEMENTS.put(e.getClass(), e));
+		MODELE.getAllEnvoutements().forEach(e -> ENVOUTEMENTS.put(e.getId(), e));
 	}
 
 	private static void chargerSorts() {
-		MODELE.getAllSorts().forEach(s -> SORTS.put(s.getClass(), s));
+		MODELE.getAllSorts().forEach(s -> SORTS.put(s.getId(), s));
 	}
 
 	private static void chargerEntites() {
 		MODELE.getAllEntites().forEach(e -> ENTITES.put(e.getId(), e));
 	}
 
-	public static <C extends ClasseEnvoutement> C getEnvoutementFromClass(Class<C> c) {
-		return (C) ENVOUTEMENTS.get(c);
-	}
-
-	public static <C extends ClasseSort> C getSortFromClass(Class<C> c) {
-		return (C) SORTS.get(c);
+	public static ClasseEnvoutement getEnvoutementFromId(Long idClasseEnvoutement) {
+		ClasseEnvoutement ce = ENVOUTEMENTS.get(idClasseEnvoutement);
+		if (ce == null) {
+			throw new IllegalArgumentException("id : " + idClasseEnvoutement);
+		}
+		return ce;
 	}
 
 	public static ClasseSort getSortFromId(Long idClasseSort) {
-		return SORTS.values().stream()
-				.filter((s) -> s.getId() == idClasseSort)
-				.findFirst().get();
+		ClasseSort cs = SORTS.get(idClasseSort);
+		if (cs == null) {
+			throw new IllegalArgumentException("id : " + idClasseSort);
+		}
+		return cs;
 	}
 
 	public static <C extends ClasseEntite> C getEntiteFromId(long id) throws IllegalArgumentException {
@@ -62,19 +63,11 @@ public class ClasseManager {
 	}
 
 	public static Map<Long, ClasseEnvoutement> getEnvoutements() {
-		return ENVOUTEMENTS.values().stream()
-				.collect(Collectors.toMap(
-						ce -> ce.getId(),
-						ce -> ce
-				));
+		return ENVOUTEMENTS;
 	}
 
 	public static Map<Long, ClasseSort> getSorts() {
-		return SORTS.values().stream()
-				.collect(Collectors.toMap(
-						ce -> ce.getId(),
-						ce -> ce
-				));
+		return SORTS;
 	}
 
 	public static Map<Long, ClasseEntite> getEntites() {

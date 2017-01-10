@@ -8,8 +8,6 @@ package salon.net;
 import com.corundumstudio.socketio.SocketIONamespace;
 import netserv.NamespaceContainer;
 import salon.net.events.NetSalonEventAjouterPerso;
-import salon.net.events.NetSalonEventPret;
-import salon.net.events.NetSalonEventQuitterSalon;
 import salon.net.events.NetSalonEventRetraitPerso;
 import salon.net.events.NetSalonEventSetProprietes;
 
@@ -23,12 +21,9 @@ public class NetSalon extends NamespaceContainer<ModeleNetSalon> {
 
 	public NetSalon(SocketIONamespace nspMain) {
 		super(nspMain, PREFIX, new ModeleNetSalon());
-		this.addAllEvents(
-				new NetSalonEventSetProprietes(this),
-				new NetSalonEventQuitterSalon(this),
+		this.addAllEvents(new NetSalonEventSetProprietes(this),
 				new NetSalonEventAjouterPerso(this),
-				new NetSalonEventRetraitPerso(this),
-				new NetSalonEventPret(this)
+				new NetSalonEventRetraitPerso(this)
 		);
 	}
 

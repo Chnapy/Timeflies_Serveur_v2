@@ -5,6 +5,8 @@
  */
 package classe;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 /**
  * FonctionXP
  * Enum
@@ -29,6 +31,7 @@ public enum FonctionXP {
 		this.id = id;
 	}
 
+	@JsonValue
 	public int getId() {
 		return id;
 	}

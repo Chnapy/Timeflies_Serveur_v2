@@ -19,6 +19,12 @@ import java.util.stream.Stream;
  */
 public class CombatEquipe extends HashSet<CombatEntite> {
 	
+	private final int id;
+	
+	public CombatEquipe(int id) {
+		this.id = id;
+	}
+	
 	public Set<CombatEntite> getCombatEntites(Predicate<CombatEntite> predicate) {
 		return this.stream().filter(predicate).collect(Collectors.toSet());
 	}
@@ -33,6 +39,10 @@ public class CombatEquipe extends HashSet<CombatEntite> {
 		return this.stream()
 				.filter((c) -> c instanceof CombatPersonnage)
 				.map((c) -> (CombatPersonnage) c);
+	}
+
+	public int getId() {
+		return id;
 	}
 
 }

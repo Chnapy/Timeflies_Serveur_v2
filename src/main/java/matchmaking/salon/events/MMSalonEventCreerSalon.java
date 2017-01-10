@@ -24,6 +24,8 @@ import salon.Salon;
 public class MMSalonEventCreerSalon extends MMSalonEventListener<RecCreerSalon> {
 
 	private static final String SUFFIX = "creersalon";
+	
+	private static long NEW_ID_SALON = 0;
 
 	public MMSalonEventCreerSalon(MatchmakingSalon nspCtn) {
 		super(SUFFIX, nspCtn, RecCreerSalon.class);
@@ -31,32 +33,35 @@ public class MMSalonEventCreerSalon extends MMSalonEventListener<RecCreerSalon> 
 
 	@Override
 	public boolean isEventRecevable(SocketIOClient client, RecCreerSalon data) {
-		return super.isEventRecevable(client, data) 
+		return super.isEventRecevable(client, data)
 				&& ((Client) client.get(NetworkServeur.CLIENT_CLIENT)).hasStatut(StatutClient.LISTE_SALONS);
 	}
 
 	@Override
 	public void onEvent(SocketIOClient client, RecCreerSalon data, AckRequest ackSender, Client c) {
-try {
-		Salon salon = new Salon(c);
-		SendCreerSalon scs = new SendCreerSalon();
-		scs.setSuccess(true);
-		scs.setSalon(salon);
-		
-		System.out.println(MyJSONParser.objectToJSONString(salon));
+		try {
+			Salon salon = new Salon(getNewIdSalon(), c);
+			SendCreerSalon scs = new SendCreerSalon();
+			scs.setSuccess(true);
+			scs.setSalon(salon);
 
-		client.set(NetworkServeur.CLIENT_SALON, salon);
-		c.addStatut(StatutClient.EN_SALON);
-		client.sendEvent(getEvent(), scs);
+			System.out.println(MyJSONParser.objectToJSONString(salon));
 
-		this.nspCtn.getClients().values().stream()
-				.filter(cl -> cl.hasStatut(StatutClient.LISTE_SALONS))
-				.forEach(cl -> cl.getSocketClient().sendEvent(getEvent(), scs));
+			client.set(NetworkServeur.CLIENT_SALON, salon);
+			c.addStatut(StatutClient.EN_SALON);
+//			client.sendEvent(getEvent(), scs);
 
-		this.nspCtn.getSalons().put(salon.getId(), salon);
-} catch(Exception e) {
-	e.printStackTrace();
-}
+			this.sendEventToHasStatuts(scs, StatutClient.LISTE_SALONS);
+
+			this.nspCtn.getSalons().put(salon.getId(), salon);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private static long getNewIdSalon() {
+		NEW_ID_SALON++;
+		return NEW_ID_SALON;
 	}
 
 	public static class RecCreerSalon extends Receptable {

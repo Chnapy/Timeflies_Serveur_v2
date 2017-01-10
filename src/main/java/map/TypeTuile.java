@@ -5,6 +5,8 @@
  */
 package map;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 /**
  * TypeTuile
  * Enum
@@ -42,6 +44,7 @@ public enum TypeTuile {
 		this.vue = vue;
 	}
 
+	@JsonValue
 	public int getId() {
 		return id;
 	}

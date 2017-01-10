@@ -30,7 +30,7 @@ public class MMSalonEventRejoindreSalon extends MMSalonEventListener<RecRejoindr
 
 	@Override
 	public boolean isEventRecevable(SocketIOClient client, RecRejoindreSalon data) {
-		return super.isEventRecevable(client, data) 
+		return super.isEventRecevable(client, data)
 				&& ((Client) client.get(NetworkServeur.CLIENT_CLIENT)).hasStatut(StatutClient.LISTE_SALONS);
 	}
 
@@ -38,18 +38,20 @@ public class MMSalonEventRejoindreSalon extends MMSalonEventListener<RecRejoindr
 	public void onEvent(SocketIOClient client, RecRejoindreSalon data, AckRequest ackSender, Client c) {
 
 		Salon salon = this.nspCtn.getSalons().get(data.getIdsalon());
-		
+
 		SendRejoindreSalon srs = new SendRejoindreSalon();
-		srs.setSuccess(salon != null);
-		
-		if (salon != null) {
+		srs.setIdjoueur(c.getId());
+		srs.setSuccess(salon != null && !salon.isLock());
+
+		if (srs.isSuccess()) {
 			salon.getClients().put(c, false);
 			client.set(NetworkServeur.CLIENT_SALON, salon);
 			c.addStatut(StatutClient.EN_SALON);
 			srs.setSalon(salon);
+			salon.sendToAll(getEvent(), srs);
+		} else {
+			client.sendEvent(getEvent(), srs);
 		}
-		
-		client.sendEvent(getEvent(), srs);
 	}
 
 	public static class RecRejoindreSalon extends Receptable {
@@ -67,7 +69,16 @@ public class MMSalonEventRejoindreSalon extends MMSalonEventListener<RecRejoindr
 
 	public static class SendRejoindreSalon extends Sendable {
 
+		private long idjoueur;
 		private Salon salon;
+
+		public long getIdjoueur() {
+			return idjoueur;
+		}
+
+		public void setIdjoueur(long idjoueur) {
+			this.idjoueur = idjoueur;
+		}
 
 		public Salon getSalon() {
 			return salon;
