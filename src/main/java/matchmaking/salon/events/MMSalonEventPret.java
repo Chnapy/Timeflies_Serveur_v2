@@ -36,7 +36,7 @@ public class MMSalonEventPret extends MMSalonEventListener<RecPret> {
 	public boolean isEventRecevable(SocketIOClient client, RecPret data) {
 		Client c = client.get(NetworkServeur.CLIENT_CLIENT);
 		Salon s = client.get(NetworkServeur.CLIENT_SALON);
-		return c != null && c.hasStatut(StatutClient.LOGGUE) && s != null && !s.isLock();
+		return c != null && c.hasStatut(StatutClient.LOGGUE) && s != null && s.isPretable();
 	}
 
 	@Override

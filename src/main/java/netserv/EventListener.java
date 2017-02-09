@@ -23,7 +23,7 @@ import java.util.logging.Logger;
  */
 public abstract class EventListener<N extends NamespaceContainer, M extends Modele, C extends Receptable> extends NetworkListener<N> implements DataListener<C> {
 	
-	public static final String SEPARATEUR = "_";
+	private static final String SEPARATEUR = "_";
 
 	private final String suffixe;
 	private String prefixe;
@@ -46,7 +46,7 @@ public abstract class EventListener<N extends NamespaceContainer, M extends Mode
 	}
 	
 	public String getEvent(String suffixe) {
-		return prefixe + SEPARATEUR + suffixe;
+		return getAllEvent(prefixe, suffixe);
 	}
 
 	public Class<?> getDataClass() {
@@ -82,6 +82,10 @@ public abstract class EventListener<N extends NamespaceContainer, M extends Mode
 		clients.stream()
 				.filter((Client cl) -> cl.hasStatut(statuts))
 				.forEach(cl -> cl.getSocketClient().sendEvent(event, send));
+	}
+	
+	public static String getAllEvent(String prefix, String suffix) {
+		return prefix + SEPARATEUR + suffix;
 	}
 
 }

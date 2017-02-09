@@ -29,7 +29,7 @@ public class PropNbrPersosTotaux extends ProprieteLimite<Integer, Integer> {
 	}
 
 	@Override
-	protected void afterSet() {
+	public void afterSet() {
 		ArrayList<Personnage> toRemove = new ArrayList();
 		int i = 0;
 		for (SalonEquipe se : this.salon.getEquipes().values()) {

@@ -5,6 +5,7 @@
  */
 package salon.proprietes;
 
+import classe.ClasseManager;
 import java.util.Set;
 import java.util.stream.Collectors;
 import salon.ClasseMap;
@@ -24,12 +25,11 @@ public class PropMap extends ProprieteLimite<ClasseMap, Integer> {
 
 	@Override
 	protected ClasseMap objectToValeur(Integer newValeur) throws IllegalArgumentException {
-		return this.salon.getModele().getClasseMapFromId(newValeur)
-				.<IllegalArgumentException>orElseThrow(IllegalArgumentException::new);
+		return ClasseManager.getClasseMapFromId(newValeur);
 	}
 
 	@Override
-	protected void afterSet() {
+	public void afterSet() {
 		ClasseMap map = getValeur();
 		
 		Set<Integer> typecombats = map.getTypecombat().stream().map(t -> t.getId()).collect(Collectors.toSet());

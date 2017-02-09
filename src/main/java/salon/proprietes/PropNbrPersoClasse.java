@@ -30,7 +30,7 @@ public class PropNbrPersoClasse extends ProprieteLimite<Integer, Integer> {
 	}
 
 	@Override
-	protected void afterSet() {
+	public void afterSet() {
 		HashMap<ClasseEntite, Integer> nbrClasses = new HashMap();
 		ArrayList<Personnage> toRemove = new ArrayList();
 		this.salon.getEquipes().values().forEach((se)

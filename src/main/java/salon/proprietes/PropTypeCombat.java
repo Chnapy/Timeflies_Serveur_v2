@@ -6,7 +6,6 @@
 package salon.proprietes;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonValue;
 import salon.Salon;
 import salon.TypeCombat;
 import salon.typecombatproprietes.SalonProprietes;
@@ -33,8 +32,9 @@ public class PropTypeCombat extends ProprieteLimite<TypeCombat, Integer> {
 	}
 
 	@Override
-	protected void afterSet() {
+	public void afterSet() {
 		this.typeCombatProprietes = this.getValeur().getNewSalonProprietes(salon);
+		this.typeCombatProprietes.checkEquipes(this.salon.getEquipes());
 	}
 
 	public SalonProprietes getTypeCombatProprietes() {

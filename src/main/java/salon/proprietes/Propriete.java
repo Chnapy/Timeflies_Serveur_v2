@@ -37,7 +37,7 @@ public abstract class Propriete<T, O> {
 
 	protected abstract T objectToValeur(O newValeur) throws IllegalArgumentException;
 
-	protected void afterSet() {
+	public void afterSet() {
 	}
 
 	public void setValeur(O newValeur) throws IllegalArgumentException {

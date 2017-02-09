@@ -158,6 +158,8 @@ public class Salon extends Proprietable {
 	public boolean setPret(Client c, boolean pret) {
 		boolean ret = this.clients.get(c) != pret
 				&& getClientEquipe(c).isPresent();
+		
+		System.out.println((this.clients.get(c) != pret) + " " + getClientEquipe(c).isPresent());
 
 		if (ret) {
 			this.clients.merge(c, pret, (cl, val) -> pret);
@@ -181,27 +183,32 @@ public class Salon extends Proprietable {
 
 	public Optional<Personnage> ajouterPerso(Client c, long idperso, int idequipe) {
 		if (this.clients.get(c) != false) {
+			System.out.println("client deja pret");
 			return Optional.empty();
 		}
 
 		Personnage p = c.getPersonnages().get(idperso);
 		if (p == null) {
+			System.out.println("perso non possédé par c");
 			return Optional.empty();
 		}
 
 		SalonEquipe se = this.equipes.get(idequipe);
 		if (se == null || se.contains(p)) {
+			System.out.println("equipe inexistante ou possede deja p");
 			return Optional.empty();
 		}
 
 		Optional<SalonEquipe> op = getEquipeOfPerso(p);
 		op.ifPresent(sef -> sef.removeClient(c));
 
-		boolean success = this.<PropTypeCombat>getProp(TypePropriete.NBR_PERSOS_CLASSE).getTypeCombatProprietes().ajouterPerso(p, se);
+		boolean success = this.<PropTypeCombat>getProp(TypePropriete.TYPECOMBAT).getTypeCombatProprietes().ajouterPerso(p, se);
 
 		if (success) {
+			System.out.println("succes");
 			return Optional.of(p);
 		} else {
+			System.out.println("fail");
 			return Optional.empty();
 		}
 //		se.add(p);
@@ -295,6 +302,11 @@ public class Salon extends Proprietable {
 	@JsonGetter("equipes")
 	public Collection<SalonEquipe> getJSONEquipes() {
 		return this.equipes.values();
+	}
+
+	public boolean isPretable() {
+		return !this.isLock() 
+				&& getProp(TypePropriete.MAP).getValeur() != null;
 	}
 
 }

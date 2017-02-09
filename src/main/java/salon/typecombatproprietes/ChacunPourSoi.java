@@ -7,7 +7,9 @@ package salon.typecombatproprietes;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import salon.Salon;
+import salon.SalonEquipe;
 import salon.net.events.NetSalonEventSetProprietes;
 import salon.proprietes.PropNbrPersosTotaux;
 import salon.proprietes.Propriete;
@@ -45,5 +47,17 @@ public class ChacunPourSoi extends SalonProprietes {
 				data.setNbr_persos_total(this.<PropNbrPersosTotaux>getProp(TypePropriete.NBR_PERSOS_TOTAUX).getValeur());
 			}
 		}
+	}
+
+	@Override
+	public void checkEquipes(Map<Integer, SalonEquipe> equipes) {
+		SalonEquipe se = new SalonEquipe(1);
+		equipes.values().forEach(e -> e.forEach(p -> {
+			if (se.size() < this.<PropNbrPersosTotaux>getProp(TypePropriete.NBR_PERSOS_TOTAUX).getValeur()) {
+				se.add(p);
+			}
+		}));
+		equipes.clear();
+		equipes.put(1, se);
 	}
 }

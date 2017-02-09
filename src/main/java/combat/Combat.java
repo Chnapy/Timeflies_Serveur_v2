@@ -13,8 +13,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 import map.CombatMap;
+import netserv.Sendable;
 import salon.Salon;
-import salon.SalonEquipe;
 import salon.proprietes.PropMap;
 import salon.proprietes.PropTypeCombat;
 import salon.proprietes.TypePropriete;
@@ -53,7 +53,11 @@ public class Combat {
 		this.pileAction = new CombatPileAction();
 		this.statut = StatutCombat.EN_ATTENTE;
 	}
-
+	
+	public void sendToAll(String event, Sendable send) {
+		clients.forEach(c -> c.getSocketClient().sendEvent(event, send));
+	}
+	
 	public long getId() {
 		return id;
 	}

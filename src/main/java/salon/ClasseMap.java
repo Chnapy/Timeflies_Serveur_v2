@@ -14,6 +14,11 @@ import java.util.stream.Collectors;
  *
  */
 public class ClasseMap  {
+	
+	@JsonIgnore
+	private String chemin;
+	
+	private int idmap;
 
 	private String nom, description;
 	private long idcreateur;
@@ -21,24 +26,18 @@ public class ClasseMap  {
 			nbrequipemax, nbrpersosequipemax, difficulte;
 	private Set<TypeCombat> typecombat;
 	
-	@JsonIgnore
+//	@JsonIgnore
 	private Set<ClasseTuile> tuiles;
 
 	public ClasseMap() {
 	}
 
-	public ClasseMap(String nom, String description,
-			int versionMajeure, int versionMineure,
-			int nbrEquipeMax, int nbrPersosEquipeMax,
-			int difficulte, Set<ClasseTuile> tuiles) {
-		this.nom = nom;
-		this.description = description;
-		this.versionMajeure = versionMajeure;
-		this.versionMineure = versionMineure;
-		this.nbrequipemax = nbrEquipeMax;
-		this.nbrpersosequipemax = nbrPersosEquipeMax;
-		this.difficulte = difficulte;
-		this.tuiles = tuiles;
+	public int getIdmap() {
+		return idmap;
+	}
+
+	public void setIdmap(int idmap) {
+		this.idmap = idmap;
 	}
 
 	public void setNom(String nom) {
@@ -89,6 +88,14 @@ public class ClasseMap  {
 		this.typecombat = typecombat.stream().map(i -> TypeCombat.getFromId(i)).collect(Collectors.toSet());
 	}
 
+	public String getChemin() {
+		return chemin;
+	}
+
+	public void setChemin(String chemin) {
+		this.chemin = chemin;
+	}
+
 	public String getNom() {
 		return nom;
 	}
@@ -125,55 +132,5 @@ public class ClasseMap  {
 	public String toString() {
 		return "ClasseMap{" + "nom=" + nom + ", description=" + description + ", versionMajeure=" + versionMajeure + ", versionMineure=" + versionMineure + ", nbrEquipeMax=" + nbrequipemax + ", nbrPersosEquipeMax=" + nbrpersosequipemax + ", difficulte=" + difficulte + ", tuiles=" + tuiles + '}';
 	}
-
-//	@Override
-//	public Compressed getCompressed() {
-//		return new ClasseMapCompressed(this);
-//	}
-//
-//	public class ClasseMapCompressed implements Compressed {
-//
-//		private final String nom, description;
-//		private final int versionMajeure, versionMineure,
-//				nbrEquipeMax, nbrPersosEquipeMax, difficulte;
-//
-//		public ClasseMapCompressed(ClasseMap map) {
-//			nom = map.getNom();
-//			description = map.getDescription();
-//			versionMajeure = map.getVersionMajeure();
-//			versionMineure = map.getVersionMineure();
-//			nbrEquipeMax = map.getNbrequipemax();
-//			nbrPersosEquipeMax = map.getNbrpersosequipemax();
-//			difficulte = map.getDifficulte();
-//		}
-//
-//		public String getNom() {
-//			return nom;
-//		}
-//
-//		public String getDescription() {
-//			return description;
-//		}
-//
-//		public int getVersionMajeure() {
-//			return versionMajeure;
-//		}
-//
-//		public int getVersionMineure() {
-//			return versionMineure;
-//		}
-//
-//		public int getNbrEquipeMax() {
-//			return nbrEquipeMax;
-//		}
-//
-//		public int getNbrpersosequipemax() {
-//			return nbrPersosEquipeMax;
-//		}
-//
-//		public int getDifficulte() {
-//			return difficulte;
-//		}
-//	}
 
 }

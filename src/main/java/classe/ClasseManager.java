@@ -7,6 +7,7 @@ package classe;
 
 import java.util.HashMap;
 import java.util.Map;
+import salon.ClasseMap;
 
 /**
  * ClasseManager.java
@@ -19,6 +20,7 @@ public class ClasseManager {
 	private static final HashMap<Long, ClasseEnvoutement> ENVOUTEMENTS = new HashMap();
 	private static final HashMap<Long, ClasseSort> SORTS = new HashMap();
 	private static final HashMap<Long, ClasseEntite> ENTITES = new HashMap();
+	private static final HashMap<Integer, ClasseMap> MAPS = new HashMap();
 
 	public static void start() {
 		chargerEnvoutements();
@@ -72,6 +74,13 @@ public class ClasseManager {
 
 	public static Map<Long, ClasseEntite> getEntites() {
 		return ENTITES;
+	}
+	
+	public static ClasseMap getClasseMapFromId(int idmap) throws IllegalArgumentException {
+		if(MAPS.get(idmap) == null) {
+			MAPS.put(idmap, MODELE.getClasseMap(idmap));
+		}
+		return MAPS.get(idmap);
 	}
 
 	private ClasseManager() {

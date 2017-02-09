@@ -31,7 +31,7 @@ public class Matchmaking {
 	}
 	
 	public void salonTousPret(Salon s) {
-		String event = MatchmakingSalon.PREFIX + EventListener.SEPARATEUR + SUFFIX_LANCEMENT_COMBAT;
+		String event = EventListener.getAllEvent(MatchmakingSalon.PREFIX, SUFFIX_LANCEMENT_COMBAT);
 		Temps datelancement = new Temps().addMillis(Const.CHRONO_SALON);
 		
 		SendLancementCombat slc = new SendLancementCombat();

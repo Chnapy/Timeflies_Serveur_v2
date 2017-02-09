@@ -27,15 +27,15 @@ public class MyJSONParser {
 		JsonNode node = MAPPER.readTree(file);
 		return node;
 	}
-	
+
 	public static <T> T fileToObject(File file, Class<T> c) throws IOException {
 		return MAPPER.readValue(file, c);
 	}
-	
+
 	public static String objectToJSONString(Object o) throws JsonProcessingException {
 		return MAPPER.writeValueAsString(o);
 	}
-	
+
 	private MyJSONParser() {
 	}
 

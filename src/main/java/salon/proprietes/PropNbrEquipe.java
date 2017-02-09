@@ -28,7 +28,7 @@ public class PropNbrEquipe extends ProprieteLimite<Integer, Integer> {
 	}
 
 	@Override
-	protected void afterSet() {
+	public void afterSet() {
 		Map<Integer, SalonEquipe> equipes = salon.getEquipes();
 		int size;
 		while ((size = equipes.size()) < this.getValeur()) {

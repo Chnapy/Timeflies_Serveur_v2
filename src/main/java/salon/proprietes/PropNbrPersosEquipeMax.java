@@ -5,10 +5,8 @@
  */
 package salon.proprietes;
 
-import client.Client;
 import client.Personnage;
 import java.util.ArrayList;
-import java.util.HashMap;
 import main.Const;
 import salon.Salon;
 
@@ -30,7 +28,7 @@ public class PropNbrPersosEquipeMax extends ProprieteLimite<Integer, Integer> {
 	}
 
 	@Override
-	protected void afterSet() {
+	public void afterSet() {
 		ArrayList<Personnage> toRemove = new ArrayList();
 		this.salon.getEquipes().values().forEach((se)
 				-> {

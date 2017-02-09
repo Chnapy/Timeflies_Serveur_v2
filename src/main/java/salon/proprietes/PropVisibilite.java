@@ -26,7 +26,7 @@ public class PropVisibilite extends ProprieteLimite<TypeVisibilite, Integer> {
 	}
 
 	@Override
-	protected void afterSet() {
+	public void afterSet() {
 		//TODO
 	}
 

@@ -7,7 +7,9 @@ package salon.typecombatproprietes;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import salon.Salon;
+import salon.SalonEquipe;
 import salon.net.events.NetSalonEventSetProprietes;
 import salon.proprietes.PropNbrEquipe;
 import salon.proprietes.PropNbrPersoClasseEquipeMax;
@@ -70,6 +72,14 @@ public final class ParEquipe extends SalonProprietes {
 			} catch (IllegalArgumentException ex) {
 				data.setNbr_eq_persos_joueur(this.<PropNbrPersoJoueurEquipeMax>getProp(TypePropriete.NBR_PERSOS_JOUEUR_EQUIPE).getValeur());
 			}
+		}
+	}
+
+	@Override
+	public void checkEquipes(Map<Integer, SalonEquipe> equipes) {
+		this.getAllProp().forEach(p -> p.afterSet());
+		for (int i = 1; i <= (int) getProp(TypePropriete.NBR_EQUIPES_MAX).getValeur(); i++) {
+			equipes.putIfAbsent(i, new SalonEquipe(i));
 		}
 	}
 }

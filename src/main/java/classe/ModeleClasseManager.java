@@ -9,6 +9,8 @@ import BDD.BDD;
 import classe.zone.CoucheZone;
 import classe.zone.TypeZone;
 import classe.zone.Zone;
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -21,7 +23,10 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import main.Const;
 import netserv.Modele;
+import outils.json.MyJSONParser;
+import salon.ClasseMap;
 
 /**
  * ModeleClasseManager.java
@@ -30,16 +35,16 @@ import netserv.Modele;
 public class ModeleClasseManager extends Modele {
 
 	private static final String QUERY_GET_ENVOUTEMENTS = "SELECT * FROM classeenvoutement",
-			
 			QUERY_GET_SORTS = "SELECT * FROM classesort NATURAL JOIN typexp",
 			QUERY_GET_SORTSCPHYSIQUE = "SELECT * FROM relcphysiqueclassesort NATURAL JOIN cphysique WHERE id_classesort=?",
 			QUERY_GET_SORTSZONE = "SELECT * FROM relclassesortzone NATURAL JOIN zone WHERE id_classesort=?",
 			QUERY_GET_SORTSENV = "SELECT * FROM relclassesortclasseenvoutement WHERE id_classesort=? AND supprime=false",
-			
 			QUERY_GET_ENTITES = "SELECT * FROM classeentite NATURAL JOIN typexp WHERE supprime=false",
 			QUERY_GET_ENTITESCPHYSIQUE = "SELECT * FROM relcphysiqueclasseentite NATURAL JOIN cphysique "
 			+ "WHERE id_classeentite=?",
 			QUERY_GET_ENTITESSORTS = "SELECT id_classesort FROM relclasseentiteclassesort WHERE id_classeentite=? AND supprime=false";
+
+	private static final String QUERY_GET_MAP = "SELECT chemin FROM map WHERE id_map=?";
 
 	public Set<ClasseEnvoutement> getAllEnvoutements() {
 
@@ -162,7 +167,7 @@ public class ModeleClasseManager extends Modele {
 		ClasseXP cxp = new ClasseXP(FonctionXP.getFromId(idFonctionXp), influencexp);
 
 		Zone zonePortee = new Zone(czonePortee), zoneAction = new Zone(czoneAction);
-		
+
 		Set<ClasseEnvoutement> envoutements = idenvoutements.stream()
 				.map(ide -> ClasseManager.getEnvoutementFromId(ide))
 				.collect(Collectors.toSet());
@@ -242,6 +247,50 @@ public class ModeleClasseManager extends Modele {
 		ClasseXP cxp = new ClasseXP(FonctionXP.getFromId(idFonctionXp), influencexp);
 
 		return (ClasseEntite) classe.getConstructors()[0].newInstance(id, actif, sorts, cxp, cphysique);
+	}
+
+	public ClasseMap getClasseMap(int idmap) throws IllegalArgumentException {
+
+		String chemin;
+
+		try (Connection connection = BDD.getConnection();
+				PreparedStatement st = connection.prepareStatement(QUERY_GET_MAP)) {
+
+			st.setInt(1, idmap);
+
+			try (ResultSet rs = st.executeQuery()) {
+				if (!rs.next()) {
+					throw new IllegalArgumentException("idmap : " + idmap);
+				}
+
+				chemin = rs.getString("chemin");
+			}
+
+			connection.commit();
+		} catch (SQLException ex) {
+			Logger.getLogger(ModeleClasseManager.class.getName()).log(Level.SEVERE, null, ex);
+			throw new Error(ex);
+		}
+
+		chemin = Const.PATH_MAPS + chemin;
+
+		try {
+			return getClasseFromFile(chemin, idmap);
+		} catch (IOException ex) {
+			Logger.getLogger(ModeleClasseManager.class.getName()).log(Level.SEVERE, null, ex);
+			throw new Error(ex);
+		}
+
+	}
+	
+	private ClasseMap getClasseFromFile(String path, int idmap) throws IOException {
+		ClasseMap cm = MyJSONParser.fileToObject(new File(path), ClasseMap.class);
+		cm.setChemin(path);
+		cm.setIdmap(idmap);
+		
+		System.out.println(cm);
+		
+		return cm;
 	}
 
 }

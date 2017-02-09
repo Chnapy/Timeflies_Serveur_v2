@@ -43,6 +43,14 @@ public class Temps {
 		this.timeInMillis += millis;
 		return this;
 	}
+	
+	public long getTimeFromNow() throws UnsupportedOperationException {
+		long ret = this.timeInMillis - System.currentTimeMillis();
+		if(ret < 0) {
+			throw new UnsupportedOperationException("Temps passé : " + ret);
+		}
+		return ret;
+	}
 
 	@JsonValue
 	public long getTimeInMillis() {
